@@ -1,0 +1,24 @@
+/home/wille/.local/lib/python3.10/site-packages/torch/utils/data/dataloader.py:666: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  warnings.warn(warn_msg)
+[infra] device=cpu
+[dados] max_images=2000 -> usando 2000 imagens
+[dados] 1900 treino / 100 val  (datasets/BOSSbase_1.01)
+[treino] época   1  img_mse=0.01627  msg_bce=0.1532  bit_acc=0.9428
+[  val ] época   1  bit_acc=0.9921
+[treino] época   2  img_mse=0.01223  msg_bce=0.0228  bit_acc=0.9942
+[  val ] época   2  bit_acc=0.9964
+[treino] época   3  img_mse=0.01234  msg_bce=0.0132  bit_acc=0.9965
+[  val ] época   3  bit_acc=0.9969
+[treino] época   4  img_mse=0.01044  msg_bce=0.0083  bit_acc=0.9978
+[  val ] época   4  bit_acc=0.9983
+[treino] época   5  img_mse=0.01274  msg_bce=0.0085  bit_acc=0.9975
+[  val ] época   5  bit_acc=0.9989
+[treino] época   6  img_mse=0.00927  msg_bce=0.0051  bit_acc=0.9986
+[  val ] época   6  bit_acc=0.9993
+[treino] época   7  img_mse=0.01358  msg_bce=0.0061  bit_acc=0.9982
+[  val ] época   7  bit_acc=0.9983
+[treino] época   8  img_mse=0.00864  msg_bce=0.0038  bit_acc=0.9989
+[  val ] época   8  bit_acc=0.9961
+
+[fim] checkpoints e amostras em: runs/phase0_bossbase
+Se bit_acc(val) ~0.99 e as stego parecem com as cover -> pode ligar a WGAN-GP (Fase 2).

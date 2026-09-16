@@ -1,0 +1,8 @@
+run,epocas,melhor_epoca,acuracia_bits,psnr,ssim,auc_srnet,psnr_medio_10_ultimas,epocas_psnr_maior_igual_35,fonte
+"Fase 0 (BOSSBase, GPU)",120,109,0.9999,35.16,0.9625,,33.87,1,runs/phase0_bossbase/metricas_val.csv
+"Fase 0 (local, CPU, 2k img)",8,8,0.9961,,,,,0,runs/phase0_local_cpu/metricas_val.csv
+Fase 2 (WGAN-GP),60,55,0.9997,36.30,0.9743,,36.15,56,runs/phase2_bossbase/metricas_val.csv
+"Fase 2.5 (Fase 0, residual)",120,113,1.0000,35.94,0.9467,,35.13,35,runs/phase0_residual/metricas_val.csv
+"Fase 2.5 (Fase 2, residual)",60,59,0.9998,38.27,0.9803,,38.06,60,runs/phase2_residual/metricas_val.csv
+Fase 3 (SRNet no laço),60,1,0.9989,36.25,0.9739,0.9978,34.47,37,runs/phase3_bossbase/metricas_val.csv
+"Fase 3 (sanidade, 3 ép.)",3,2,0.9997,35.49,0.9731,0.9061,35.4,3,runs/phase3_sanidade/metricas_val.csv

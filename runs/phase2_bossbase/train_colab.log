@@ -1,0 +1,143 @@
+Overwriting phase0_encoder_decoder.py
+
+Writing phase2_wgangp.py
+
+[infra] dispositivo=cuda  payload=0.0625 bpp  lambda_adv=0.01  n_critic=5
+[dados] 9500 treino / 500 val  (/content/drive/MyDrive/IC_stego/datasets/BOSSbase_1.01)
+
+/usr/local/lib/python3.12/dist-packages/torch/utils/data/dataloader.py:424: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+
+[warm start] pesos da Fase 0 carregados de /content/drive/MyDrive/IC_stego/runs/phase0_bossbase/ckpt_best.pt
+
+/usr/local/lib/python3.12/dist-packages/torch/utils/data/dataloader.py:432: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+/usr/local/lib/python3.12/dist-packages/torch/autograd/graph.py:869: UserWarning: Attempting to run cuBLAS, but there was no current CUDA context! Attempting to set the primary context... (Triggered internally at /pytorch/aten/src/ATen/cuda/CublasHandlePool.cpp:335.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+
+[treino] época   1  perda_c=-0.071  W=+0.275  adv=+0.800  img_mse=0.00033  msg_bce=0.0003  acuracia_bits=0.9999
+[  val ] época   1  acuracia_bits=0.9999  psnr=34.80dB  ssim=0.9632  linf=0.3725    
+[treino] época   2  perda_c=-0.663  W=+0.744  adv=+1.423  img_mse=0.00030  msg_bce=0.0007  acuracia_bits=0.9998
+[  val ] época   2  acuracia_bits=0.9998  psnr=35.34dB  ssim=0.9667  linf=0.3667  OK
+[treino] época   3  perda_c=-0.764  W=+0.823  adv=+1.756  img_mse=0.00029  msg_bce=0.0008  acuracia_bits=0.9998
+[  val ] época   3  acuracia_bits=0.9998  psnr=34.94dB  ssim=0.9626  linf=0.3425    
+[treino] época   4  perda_c=-0.786  W=+0.845  adv=+1.866  img_mse=0.00029  msg_bce=0.0009  acuracia_bits=0.9997
+[  val ] época   4  acuracia_bits=0.9998  psnr=35.47dB  ssim=0.9675  linf=0.3528  OK
+[treino] época   5  perda_c=-0.815  W=+0.869  adv=+2.068  img_mse=0.00029  msg_bce=0.0009  acuracia_bits=0.9997
+[  val ] época   5  acuracia_bits=0.9998  psnr=35.41dB  ssim=0.9684  linf=0.3728  OK
+[treino] época   6  perda_c=-0.838  W=+0.891  adv=+2.313  img_mse=0.00028  msg_bce=0.0010  acuracia_bits=0.9997
+[  val ] época   6  acuracia_bits=0.9998  psnr=35.36dB  ssim=0.9683  linf=0.3820  OK
+[treino] época   7  perda_c=-0.846  W=+0.898  adv=+2.620  img_mse=0.00028  msg_bce=0.0010  acuracia_bits=0.9997
+[  val ] época   7  acuracia_bits=0.9998  psnr=35.57dB  ssim=0.9690  linf=0.4084  OK
+[treino] época   8  perda_c=-0.855  W=+0.906  adv=+2.952  img_mse=0.00028  msg_bce=0.0010  acuracia_bits=0.9997
+[  val ] época   8  acuracia_bits=0.9998  psnr=35.49dB  ssim=0.9671  linf=0.3438  OK
+[treino] época   9  perda_c=-0.862  W=+0.912  adv=+3.237  img_mse=0.00027  msg_bce=0.0010  acuracia_bits=0.9997
+[  val ] época   9  acuracia_bits=0.9997  psnr=35.39dB  ssim=0.9662  linf=0.3556  OK
+[treino] época  10  perda_c=-0.863  W=+0.912  adv=+3.384  img_mse=0.00027  msg_bce=0.0010  acuracia_bits=0.9997
+[  val ] época  10  acuracia_bits=0.9997  psnr=35.68dB  ssim=0.9705  linf=0.3304  OK
+[treino] época  11  perda_c=-0.864  W=+0.912  adv=+3.410  img_mse=0.00027  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  11  acuracia_bits=0.9997  psnr=35.67dB  ssim=0.9704  linf=0.3226  OK
+[treino] época  12  perda_c=-0.864  W=+0.913  adv=+3.514  img_mse=0.00027  msg_bce=0.0010  acuracia_bits=0.9997
+[  val ] época  12  acuracia_bits=0.9997  psnr=35.73dB  ssim=0.9708  linf=0.3493  OK
+[treino] época  13  perda_c=-0.869  W=+0.916  adv=+3.617  img_mse=0.00027  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  13  acuracia_bits=0.9998  psnr=35.61dB  ssim=0.9694  linf=0.3668  OK
+[treino] época  14  perda_c=-0.873  W=+0.918  adv=+3.636  img_mse=0.00027  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  14  acuracia_bits=0.9997  psnr=35.78dB  ssim=0.9708  linf=0.3620  OK
+[treino] época  15  perda_c=-0.875  W=+0.922  adv=+3.704  img_mse=0.00027  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  15  acuracia_bits=0.9997  psnr=35.81dB  ssim=0.9706  linf=0.3663  OK
+[treino] época  16  perda_c=-0.872  W=+0.919  adv=+3.786  img_mse=0.00027  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  16  acuracia_bits=0.9998  psnr=35.62dB  ssim=0.9691  linf=0.3313  OK
+[treino] época  17  perda_c=-0.872  W=+0.918  adv=+3.968  img_mse=0.00027  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  17  acuracia_bits=0.9997  psnr=35.66dB  ssim=0.9696  linf=0.3330  OK
+[treino] época  18  perda_c=-0.865  W=+0.911  adv=+4.183  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  18  acuracia_bits=0.9988  psnr=33.87dB  ssim=0.9602  linf=0.3788    
+[treino] época  19  perda_c=-0.867  W=+0.912  adv=+4.370  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  19  acuracia_bits=0.9998  psnr=35.34dB  ssim=0.9658  linf=0.3719  OK
+[treino] época  20  perda_c=-0.867  W=+0.910  adv=+4.496  img_mse=0.00027  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  20  acuracia_bits=0.9998  psnr=35.88dB  ssim=0.9716  linf=0.3310  OK
+[treino] época  21  perda_c=-0.864  W=+0.908  adv=+4.602  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  21  acuracia_bits=0.9997  psnr=35.85dB  ssim=0.9708  linf=0.3090  OK
+[treino] época  22  perda_c=-0.861  W=+0.905  adv=+4.620  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  22  acuracia_bits=0.9998  psnr=35.64dB  ssim=0.9698  linf=0.3589  OK
+[treino] época  23  perda_c=-0.859  W=+0.903  adv=+4.678  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  23  acuracia_bits=0.9998  psnr=35.53dB  ssim=0.9656  linf=0.3450  OK
+[treino] época  24  perda_c=-0.857  W=+0.901  adv=+4.772  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  24  acuracia_bits=0.9997  psnr=34.91dB  ssim=0.9653  linf=0.3697    
+[treino] época  25  perda_c=-0.855  W=+0.899  adv=+4.818  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  25  acuracia_bits=0.9997  psnr=35.89dB  ssim=0.9716  linf=0.3880  OK
+[treino] época  26  perda_c=-0.854  W=+0.899  adv=+4.898  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  26  acuracia_bits=0.9998  psnr=36.01dB  ssim=0.9724  linf=0.3599  OK
+[treino] época  27  perda_c=-0.851  W=+0.896  adv=+4.988  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  27  acuracia_bits=0.9997  psnr=36.07dB  ssim=0.9726  linf=0.4230  OK
+[treino] época  28  perda_c=-0.847  W=+0.891  adv=+5.032  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  28  acuracia_bits=0.9998  psnr=35.89dB  ssim=0.9721  linf=0.4284  OK
+[treino] época  29  perda_c=-0.843  W=+0.886  adv=+5.000  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  29  acuracia_bits=0.9998  psnr=35.99dB  ssim=0.9712  linf=0.3755  OK
+[treino] época  30  perda_c=-0.846  W=+0.888  adv=+5.018  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  30  acuracia_bits=0.9997  psnr=36.02dB  ssim=0.9724  linf=0.4237  OK
+[treino] época  31  perda_c=-0.841  W=+0.880  adv=+5.088  img_mse=0.00026  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  31  acuracia_bits=0.9997  psnr=35.97dB  ssim=0.9720  linf=0.3975  OK
+[treino] época  32  perda_c=-0.832  W=+0.875  adv=+5.145  img_mse=0.00025  msg_bce=0.0012  acuracia_bits=0.9997
+[  val ] época  32  acuracia_bits=0.9997  psnr=36.24dB  ssim=0.9728  linf=0.4074  OK
+[treino] época  33  perda_c=-0.835  W=+0.877  adv=+5.172  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  33  acuracia_bits=0.9998  psnr=35.83dB  ssim=0.9710  linf=0.3837  OK
+[treino] época  34  perda_c=-0.832  W=+0.873  adv=+5.251  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  34  acuracia_bits=0.9997  psnr=36.09dB  ssim=0.9731  linf=0.4274  OK
+[treino] época  35  perda_c=-0.830  W=+0.871  adv=+5.381  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  35  acuracia_bits=0.9997  psnr=36.05dB  ssim=0.9731  linf=0.3366  OK
+[treino] época  36  perda_c=-0.828  W=+0.870  adv=+5.520  img_mse=0.00025  msg_bce=0.0012  acuracia_bits=0.9996
+[  val ] época  36  acuracia_bits=0.9998  psnr=35.77dB  ssim=0.9702  linf=0.3706  OK
+[treino] época  37  perda_c=-0.828  W=+0.869  adv=+5.670  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  37  acuracia_bits=0.9997  psnr=36.30dB  ssim=0.9731  linf=0.3878  OK
+[treino] época  38  perda_c=-0.825  W=+0.864  adv=+5.786  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  38  acuracia_bits=0.9998  psnr=35.63dB  ssim=0.9703  linf=0.3570  OK
+[treino] época  39  perda_c=-0.821  W=+0.863  adv=+5.899  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  39  acuracia_bits=0.9997  psnr=36.20dB  ssim=0.9731  linf=0.3867  OK
+[treino] época  40  perda_c=-0.820  W=+0.861  adv=+6.030  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  40  acuracia_bits=0.9998  psnr=35.55dB  ssim=0.9706  linf=0.4385  OK
+[treino] época  41  perda_c=-0.818  W=+0.859  adv=+6.159  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  41  acuracia_bits=0.9997  psnr=36.10dB  ssim=0.9742  linf=0.4108  OK
+[treino] época  42  perda_c=-0.814  W=+0.854  adv=+6.256  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  42  acuracia_bits=0.9998  psnr=36.00dB  ssim=0.9721  linf=0.3706  OK
+[treino] época  43  perda_c=-0.807  W=+0.848  adv=+6.265  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  43  acuracia_bits=0.9997  psnr=36.11dB  ssim=0.9733  linf=0.3591  OK
+[treino] época  44  perda_c=-0.810  W=+0.849  adv=+6.334  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  44  acuracia_bits=0.9997  psnr=36.12dB  ssim=0.9737  linf=0.3871  OK
+[treino] época  45  perda_c=-0.803  W=+0.842  adv=+6.457  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  45  acuracia_bits=0.9998  psnr=36.21dB  ssim=0.9736  linf=0.3584  OK
+[treino] época  46  perda_c=-0.803  W=+0.842  adv=+6.625  img_mse=0.00025  msg_bce=0.0012  acuracia_bits=0.9997
+[  val ] época  46  acuracia_bits=0.9997  psnr=35.98dB  ssim=0.9711  linf=0.3595  OK
+[treino] época  47  perda_c=-0.801  W=+0.840  adv=+6.718  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  47  acuracia_bits=0.9998  psnr=36.03dB  ssim=0.9730  linf=0.3994  OK
+[treino] época  48  perda_c=-0.801  W=+0.840  adv=+6.843  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  48  acuracia_bits=0.9997  psnr=36.10dB  ssim=0.9739  linf=0.3798  OK
+[treino] época  49  perda_c=-0.796  W=+0.834  adv=+6.874  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  49  acuracia_bits=0.9998  psnr=35.85dB  ssim=0.9690  linf=0.3834  OK
+[treino] época  50  perda_c=-0.796  W=+0.835  adv=+6.905  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  50  acuracia_bits=0.9998  psnr=36.03dB  ssim=0.9721  linf=0.3343  OK
+[treino] época  51  perda_c=-0.790  W=+0.828  adv=+7.018  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  51  acuracia_bits=0.9998  psnr=35.97dB  ssim=0.9728  linf=0.3912  OK
+[treino] época  52  perda_c=-0.789  W=+0.827  adv=+7.172  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  52  acuracia_bits=0.9997  psnr=36.22dB  ssim=0.9735  linf=0.3476  OK
+[treino] época  53  perda_c=-0.789  W=+0.828  adv=+7.320  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  53  acuracia_bits=0.9996  psnr=36.26dB  ssim=0.9750  linf=0.4022  OK
+[treino] época  54  perda_c=-0.788  W=+0.828  adv=+7.427  img_mse=0.00025  msg_bce=0.0012  acuracia_bits=0.9996
+[  val ] época  54  acuracia_bits=0.9997  psnr=36.30dB  ssim=0.9746  linf=0.3785  OK
+[treino] época  55  perda_c=-0.783  W=+0.821  adv=+7.459  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  55  acuracia_bits=0.9997  psnr=36.30dB  ssim=0.9743  linf=0.3596  OK
+[treino] época  56  perda_c=-0.786  W=+0.825  adv=+7.504  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  56  acuracia_bits=0.9997  psnr=36.10dB  ssim=0.9723  linf=0.3808  OK
+[treino] época  57  perda_c=-0.776  W=+0.813  adv=+7.705  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  57  acuracia_bits=0.9998  psnr=35.83dB  ssim=0.9711  linf=0.4048  OK
+[treino] época  58  perda_c=-0.780  W=+0.816  adv=+7.852  img_mse=0.00025  msg_bce=0.0012  acuracia_bits=0.9996
+[  val ] época  58  acuracia_bits=0.9997  psnr=36.21dB  ssim=0.9742  linf=0.3907  OK
+[treino] época  59  perda_c=-0.777  W=+0.814  adv=+7.981  img_mse=0.00025  msg_bce=0.0012  acuracia_bits=0.9997
+[  val ] época  59  acuracia_bits=0.9997  psnr=36.06dB  ssim=0.9738  linf=0.4486  OK
+[treino] época  60  perda_c=-0.777  W=+0.815  adv=+8.106  img_mse=0.00025  msg_bce=0.0011  acuracia_bits=0.9997
+[  val ] época  60  acuracia_bits=0.9997  psnr=36.21dB  ssim=0.9737  linf=0.3781  OK
+
+[fim] checkpoints e amostras em: /content/drive/MyDrive/IC_stego/runs/phase2_bossbase
+[melhor] época 55: acuracia_bits=0.9997  psnr=36.30dB  ssim=0.9743
+Dica: se a acurácia caiu, baixe lambda_adv; se o realismo (PSNR/SSIM) não subiu, suba lambda_adv. Um knob por vez, olhando W (Wasserstein) estabilizar.
+
+RESULTADO FASE 2: {'acuracia_bits': 0.9996835942268372, 'psnr': 36.304743182084714, 'ssim': 0.9742850232124328}

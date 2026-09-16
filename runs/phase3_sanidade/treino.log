@@ -1,0 +1,61 @@
+===== Fase 3 iniciada em 2026-08-20 01:44:10 =====
+[cfg] tamanho_img=128  tamanho_msg=32  tamanho_lote=32  largura=64  epocas=3  lambda_imagem=2.0  lambda_mensagem=1.0  lambda_residuo=0.05  lambda_adv=0.01  lambda_srnet=0.01  n_critic=5  n_srnet=1  lr_srnet=0.0001  srnet_compacta=True
+[infra] dispositivo=cuda  payload=0.0625 bpp  lambda_adv=0.01  lambda_srnet=0.01  n_critic=5  n_srnet=1  [SRNet COMPACTA]
+[warm start] gerador + crítico carregados de /content/drive/MyDrive/IC_stego/runs/phase2_bossbase/ckpt_best.pt (época 55)
+[srnet] iniciada DO ZERO — 0.61M parâmetros
+[treino] época   1  perda_c=-0.786  W=+0.826  srnet_bce=0.6585  enganar=0.7197  img_mse=0.00025  msg_bce=0.0010  acuracia_bits=0.9997
+[  val ] época   1  acuracia_bits=0.9998  psnr=35.26dB  ssim=0.9727  auc_srnet=0.6962 (efetiva 0.6962)  criterios[12.]
+[treino] época   2  perda_c=-0.782  W=+0.820  srnet_bce=0.4999  enganar=0.8720  img_mse=0.00024  msg_bce=0.0013  acuracia_bits=0.9996
+[  val ] época   2  acuracia_bits=0.9997  psnr=35.52dB  ssim=0.9725  auc_srnet=0.9121 (efetiva 0.9121)  criterios[12.]
+[treino] época   3  perda_c=-0.770  W=+0.809  srnet_bce=0.3286  enganar=1.1218  img_mse=0.00024  msg_bce=0.0016  acuracia_bits=0.9995
+[  val ] época   3  acuracia_bits=0.9995  psnr=35.42dB  ssim=0.9740  auc_srnet=0.9429 (efetiva 0.9429)  criterios[12.]
+
+[fim] checkpoints, amostras e metricas_val.csv em: /content/drive/MyDrive/IC_stego/runs/phase3_sanidade
+[melhor] época 2: acuracia_bits=0.9997  psnr=35.52dB  ssim=0.9725  auc_srnet=0.9121
+
+CRITÉRIOS DE SAÍDA DA FASE 3:
+  (1) acuracia_bits >= 0.99          -> 0.9997  OK
+  (2) PSNR >= 35.3 dB (Fase 2 - 1dB) -> 35.52  OK
+  (3) AUC do laço ~ 0.5              -> 0.9121 (efetiva 0.9121)  detector separando: suba lambda_srnet
+
+ATENÇÃO: o critério (3) mede o detector que participou do treino. Ele NÃO prova
+segurança — pode significar que aquela SRNet não convergiu. A prova é a Fase 4,
+que treina um esteganalisador independente e mede P_E. Ver ROADMAP.md.
+
+[registros] treino.log, metricas_val.csv e metricas_treino.csv em /content/drive/MyDrive/IC_stego/runs/phase3_sanidade
+
+LEMBRETE: 'espelho_ckpt' está vazio. Se isto rodou no Colab, BAIXE AGORA o
+ckpt_best.pt E os arquivos de registro — foi assim que os pesos das Fases 0 e 2
+se perderam, e a saída da célula do notebook some junto com o runtime.
+===== Fase 3 iniciada em 2026-08-20 02:07:57 =====
+[cfg] tamanho_img=128  tamanho_msg=32  tamanho_lote=32  largura=64  epocas=3  lambda_imagem=2.0  lambda_mensagem=1.0  lambda_residuo=0.05  lambda_adv=0.01  lambda_srnet=0.01  n_critic=5  n_srnet=1  lr_srnet=0.0001  srnet_compacta=True
+[infra] dispositivo=cuda  payload=0.0625 bpp  lambda_adv=0.01  lambda_srnet=0.01  n_critic=5  n_srnet=1  [SRNet COMPACTA]
+[warm start] gerador + crítico carregados de /content/drive/MyDrive/IC_stego/runs/phase2_bossbase/ckpt_best.pt (época 55)
+[srnet] iniciada DO ZERO — 0.61M parâmetros
+[tempo ] época   1   402.7s  (59 passos de gerador)  restam ~13 min
+[treino] época   1  perda_c=-0.786  W=+0.826  srnet_bce=0.6662  enganar=0.7146  img_mse=0.00025  msg_bce=0.0010  acuracia_bits=0.9997
+[  val ] época   1  acuracia_bits=0.9998  psnr=35.31dB  ssim=0.9730  auc_srnet=0.6761 (efetiva 0.6761)  criterios[12.]
+[tempo ] época   2    50.7s  (59 passos de gerador)  restam ~4 min
+[treino] época   2  perda_c=-0.782  W=+0.819  srnet_bce=0.5308  enganar=0.8381  img_mse=0.00024  msg_bce=0.0012  acuracia_bits=0.9996
+[  val ] época   2  acuracia_bits=0.9997  psnr=35.49dB  ssim=0.9731  auc_srnet=0.9061 (efetiva 0.9061)  criterios[12.]
+[tempo ] época   3    50.4s  (59 passos de gerador)  restam ~0 min
+[treino] época   3  perda_c=-0.772  W=+0.811  srnet_bce=0.3327  enganar=1.0782  img_mse=0.00024  msg_bce=0.0015  acuracia_bits=0.9995
+[  val ] época   3  acuracia_bits=0.9995  psnr=35.40dB  ssim=0.9728  auc_srnet=0.9597 (efetiva 0.9597)  criterios[12.]
+
+[fim] checkpoints, amostras e metricas_val.csv em: /content/drive/MyDrive/IC_stego/runs/phase3_sanidade
+[melhor] época 2: acuracia_bits=0.9997  psnr=35.49dB  ssim=0.9731  auc_srnet=0.9061
+
+CRITÉRIOS DE SAÍDA DA FASE 3:
+  (1) acuracia_bits >= 0.99          -> 0.9997  OK
+  (2) PSNR >= 35.3 dB (Fase 2 - 1dB) -> 35.49  OK
+  (3) AUC do laço ~ 0.5              -> 0.9061 (efetiva 0.9061)  detector separando: suba lambda_srnet
+
+ATENÇÃO: o critério (3) mede o detector que participou do treino. Ele NÃO prova
+segurança — pode significar que aquela SRNet não convergiu. A prova é a Fase 4,
+que treina um esteganalisador independente e mede P_E. Ver ROADMAP.md.
+
+[registros] treino.log, metricas_val.csv e metricas_treino.csv em /content/drive/MyDrive/IC_stego/runs/phase3_sanidade
+
+LEMBRETE: 'espelho_ckpt' está vazio. Se isto rodou no Colab, BAIXE AGORA o
+ckpt_best.pt E os arquivos de registro — foi assim que os pesos das Fases 0 e 2
+se perderam, e a saída da célula do notebook some junto com o runtime.

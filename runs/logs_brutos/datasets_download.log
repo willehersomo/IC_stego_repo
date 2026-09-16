@@ -1,0 +1,16 @@
+[BOSSBase] já extraído — pulando
+[COCO_val] baixando...
+[extract] datasets/val2017.zip -> datasets/
+warning [datasets/val2017.zip]:  156375297 extra bytes at beginning or within zipfile
+  (attempting to process anyway)
+error [datasets/val2017.zip]:  start of central directory not found;
+  zipfile corrupt.
+  (please check that you have transferred or created the zipfile in the
+  appropriate BINARY mode and that you have compiled UnZip properly)
+[DIV2K] download paralelo: 16 chunks de ~210MB
+[DIV2K] ERRO: tamanho 3874855361 != esperado 3530603713. Re-rode o script para retomar.
+==== RESUMO ====
+BOSSbase_1.01: 10000 arquivos
+val2017: 0 arquivos
+DIV2K_train_HR: 0 arquivos
+Feito. Aponte CONFIG['data_root'] para datasets/<pasta> e CONFIG['channels'] (1=BOSSBase, 3=DIV2K/COCO).

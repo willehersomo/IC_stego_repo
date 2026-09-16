@@ -1,0 +1,442 @@
+===== Fase 3 iniciada em 2026-08-20 02:16:53 =====
+[cfg] tamanho_img=128  tamanho_msg=32  tamanho_lote=32  largura=64  epocas=60  lambda_imagem=2.0  lambda_mensagem=1.0  lambda_residuo=0.05  lambda_adv=0.01  lambda_srnet=0.01  n_critic=5  n_srnet=1  lr_srnet=0.0001  srnet_compacta=False
+[infra] dispositivo=cuda  payload=0.0625 bpp  lambda_adv=0.01  lambda_srnet=0.01  n_critic=5  n_srnet=1
+[warm start] gerador + crítico carregados de /content/drive/MyDrive/IC_stego/runs/phase2_bossbase/ckpt_best.pt (época 55)
+[srnet] iniciada DO ZERO — 2.42M parâmetros
+[tempo ] época   1   677.1s  (296 passos de gerador)  restam ~666 min
+[treino] época   1  perda_c=-0.765  W=+0.801  srnet_bce=0.2364  enganar=1.9526  img_mse=0.00024  msg_bce=0.0021  acuracia_bits=0.9994
+[  val ] época   1  acuracia_bits=0.9989  psnr=36.25dB  ssim=0.9739  auc_srnet=0.9978 (efetiva 0.9978)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_best.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_best.pt' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época   2   304.9s  (296 passos de gerador)  restam ~476 min
+[treino] época   2  perda_c=-0.769  W=+0.803  srnet_bce=0.0225  enganar=3.4644  img_mse=0.00025  msg_bce=0.0027  acuracia_bits=0.9992
+[  val ] época   2  acuracia_bits=0.9994  psnr=35.88dB  ssim=0.9665  auc_srnet=0.9997 (efetiva 0.9997)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época   3   304.9s  (296 passos de gerador)  restam ~410 min
+[treino] época   3  perda_c=-0.790  W=+0.828  srnet_bce=0.0126  enganar=4.0569  img_mse=0.00026  msg_bce=0.0032  acuracia_bits=0.9990
+[  val ] época   3  acuracia_bits=0.9992  psnr=35.99dB  ssim=0.9701  auc_srnet=0.9999 (efetiva 0.9999)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época   4   304.9s  (296 passos de gerador)  restam ~374 min
+[treino] época   4  perda_c=-0.810  W=+0.849  srnet_bce=0.0105  enganar=4.4707  img_mse=0.00026  msg_bce=0.0031  acuracia_bits=0.9991
+[  val ] época   4  acuracia_bits=0.9994  psnr=35.91dB  ssim=0.9689  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época   5   304.8s  (296 passos de gerador)  restam ~350 min
+[treino] época   5  perda_c=-0.806  W=+0.844  srnet_bce=0.0035  enganar=4.8967  img_mse=0.00026  msg_bce=0.0029  acuracia_bits=0.9991
+[  val ] época   5  acuracia_bits=0.9994  psnr=35.73dB  ssim=0.9691  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época   6   304.9s  (296 passos de gerador)  restam ~333 min
+[treino] época   6  perda_c=-0.803  W=+0.840  srnet_bce=0.0064  enganar=5.0885  img_mse=0.00027  msg_bce=0.0030  acuracia_bits=0.9991
+[  val ] época   6  acuracia_bits=0.9996  psnr=35.62dB  ssim=0.9655  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época   7   304.8s  (296 passos de gerador)  restam ~319 min
+[treino] época   7  perda_c=-0.803  W=+0.841  srnet_bce=0.0080  enganar=5.2654  img_mse=0.00027  msg_bce=0.0030  acuracia_bits=0.9991
+[  val ] época   7  acuracia_bits=0.9994  psnr=35.06dB  ssim=0.9667  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época   8   304.8s  (296 passos de gerador)  restam ~307 min
+[treino] época   8  perda_c=-0.805  W=+0.843  srnet_bce=0.0040  enganar=5.3202  img_mse=0.00027  msg_bce=0.0029  acuracia_bits=0.9991
+[  val ] época   8  acuracia_bits=0.9993  psnr=35.69dB  ssim=0.9689  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época   9   304.8s  (296 passos de gerador)  restam ~297 min
+[treino] época   9  perda_c=-0.816  W=+0.855  srnet_bce=0.0025  enganar=5.5228  img_mse=0.00027  msg_bce=0.0028  acuracia_bits=0.9992
+[  val ] época   9  acuracia_bits=0.9993  psnr=36.16dB  ssim=0.9691  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  10   304.8s  (296 passos de gerador)  restam ~287 min
+[treino] época  10  perda_c=-0.810  W=+0.851  srnet_bce=0.0025  enganar=5.6087  img_mse=0.00027  msg_bce=0.0027  acuracia_bits=0.9992
+[  val ] época  10  acuracia_bits=0.9994  psnr=35.67dB  ssim=0.9661  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  11   304.8s  (296 passos de gerador)  restam ~279 min
+[treino] época  11  perda_c=-0.812  W=+0.852  srnet_bce=0.0019  enganar=5.7988  img_mse=0.00027  msg_bce=0.0028  acuracia_bits=0.9992
+[  val ] época  11  acuracia_bits=0.9995  psnr=35.84dB  ssim=0.9666  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  12   304.8s  (296 passos de gerador)  restam ~271 min
+[treino] época  12  perda_c=-0.811  W=+0.849  srnet_bce=0.0023  enganar=6.0700  img_mse=0.00027  msg_bce=0.0029  acuracia_bits=0.9991
+[  val ] época  12  acuracia_bits=0.9989  psnr=35.23dB  ssim=0.9638  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  13   304.8s  (296 passos de gerador)  restam ~264 min
+[treino] época  13  perda_c=-0.817  W=+0.853  srnet_bce=0.0023  enganar=6.2627  img_mse=0.00028  msg_bce=0.0030  acuracia_bits=0.9991
+[  val ] época  13  acuracia_bits=0.9991  psnr=35.09dB  ssim=0.9681  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  14   304.8s  (296 passos de gerador)  restam ~256 min
+[treino] época  14  perda_c=-0.819  W=+0.857  srnet_bce=0.0019  enganar=6.3490  img_mse=0.00027  msg_bce=0.0030  acuracia_bits=0.9991
+[  val ] época  14  acuracia_bits=0.9992  psnr=35.81dB  ssim=0.9661  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  15   304.8s  (296 passos de gerador)  restam ~249 min
+[treino] época  15  perda_c=-0.815  W=+0.855  srnet_bce=0.0035  enganar=6.4135  img_mse=0.00028  msg_bce=0.0032  acuracia_bits=0.9990
+[  val ] época  15  acuracia_bits=0.9993  psnr=35.17dB  ssim=0.9595  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  16   304.9s  (296 passos de gerador)  restam ~243 min
+[treino] época  16  perda_c=-0.835  W=+0.877  srnet_bce=0.0016  enganar=6.6283  img_mse=0.00028  msg_bce=0.0033  acuracia_bits=0.9990
+[  val ] época  16  acuracia_bits=0.9995  psnr=35.90dB  ssim=0.9674  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  17   304.8s  (296 passos de gerador)  restam ~236 min
+[treino] época  17  perda_c=-0.796  W=+0.835  srnet_bce=0.0045  enganar=6.6073  img_mse=0.00027  msg_bce=0.0034  acuracia_bits=0.9990
+[  val ] época  17  acuracia_bits=0.9992  psnr=34.89dB  ssim=0.9605  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  18   304.8s  (296 passos de gerador)  restam ~230 min
+[treino] época  18  perda_c=-0.838  W=+0.879  srnet_bce=0.0014  enganar=6.6591  img_mse=0.00029  msg_bce=0.0035  acuracia_bits=0.9989
+[  val ] época  18  acuracia_bits=0.9994  psnr=34.45dB  ssim=0.9539  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  19   304.8s  (296 passos de gerador)  restam ~224 min
+[treino] época  19  perda_c=-0.828  W=+0.868  srnet_bce=0.0013  enganar=6.9981  img_mse=0.00029  msg_bce=0.0032  acuracia_bits=0.9991
+[  val ] época  19  acuracia_bits=0.9993  psnr=34.92dB  ssim=0.9594  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  20   304.8s  (296 passos de gerador)  restam ~218 min
+[treino] época  20  perda_c=-0.832  W=+0.872  srnet_bce=0.0020  enganar=6.9071  img_mse=0.00029  msg_bce=0.0033  acuracia_bits=0.9990
+[  val ] época  20  acuracia_bits=0.9992  psnr=35.65dB  ssim=0.9658  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  21   304.9s  (296 passos de gerador)  restam ~212 min
+[treino] época  21  perda_c=-0.819  W=+0.858  srnet_bce=0.0023  enganar=6.9247  img_mse=0.00029  msg_bce=0.0032  acuracia_bits=0.9991
+[  val ] época  21  acuracia_bits=0.9991  psnr=34.64dB  ssim=0.9523  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  22   304.9s  (296 passos de gerador)  restam ~206 min
+[treino] época  22  perda_c=-0.911  W=+0.955  srnet_bce=0.0007  enganar=7.2164  img_mse=0.00030  msg_bce=0.0032  acuracia_bits=0.9990
+[  val ] época  22  acuracia_bits=0.9991  psnr=35.82dB  ssim=0.9667  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  23   304.8s  (296 passos de gerador)  restam ~200 min
+[treino] época  23  perda_c=-0.886  W=+0.931  srnet_bce=0.0003  enganar=7.5641  img_mse=0.00028  msg_bce=0.0032  acuracia_bits=0.9990
+[  val ] época  23  acuracia_bits=0.9988  psnr=35.53dB  ssim=0.9616  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  24   304.9s  (296 passos de gerador)  restam ~194 min
+[treino] época  24  perda_c=-0.846  W=+0.886  srnet_bce=0.0018  enganar=7.6263  img_mse=0.00028  msg_bce=0.0037  acuracia_bits=0.9989
+[  val ] época  24  acuracia_bits=0.9991  psnr=35.78dB  ssim=0.9685  auc_srnet=0.9981 (efetiva 0.9981)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  25   304.9s  (296 passos de gerador)  restam ~188 min
+[treino] época  25  perda_c=-0.834  W=+0.873  srnet_bce=0.0007  enganar=7.8775  img_mse=0.00029  msg_bce=0.0031  acuracia_bits=0.9991
+[  val ] época  25  acuracia_bits=0.9988  psnr=35.47dB  ssim=0.9662  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  26   304.8s  (296 passos de gerador)  restam ~183 min
+[treino] época  26  perda_c=-0.848  W=+0.889  srnet_bce=0.0026  enganar=8.0256  img_mse=0.00029  msg_bce=0.0033  acuracia_bits=0.9990
+[  val ] época  26  acuracia_bits=0.9993  psnr=35.71dB  ssim=0.9680  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  27   304.9s  (296 passos de gerador)  restam ~177 min
+[treino] época  27  perda_c=-0.820  W=+0.858  srnet_bce=0.0017  enganar=8.2741  img_mse=0.00028  msg_bce=0.0030  acuracia_bits=0.9991
+[  val ] época  27  acuracia_bits=0.9995  psnr=35.53dB  ssim=0.9666  auc_srnet=0.9993 (efetiva 0.9993)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  28   304.9s  (296 passos de gerador)  restam ~171 min
+[treino] época  28  perda_c=-0.815  W=+0.854  srnet_bce=0.0015  enganar=8.4347  img_mse=0.00028  msg_bce=0.0035  acuracia_bits=0.9990
+[  val ] época  28  acuracia_bits=0.9996  psnr=35.34dB  ssim=0.9632  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  29   304.9s  (296 passos de gerador)  restam ~166 min
+[treino] época  29  perda_c=-0.848  W=+0.888  srnet_bce=0.0006  enganar=8.7184  img_mse=0.00029  msg_bce=0.0032  acuracia_bits=0.9990
+[  val ] época  29  acuracia_bits=0.9992  psnr=35.49dB  ssim=0.9638  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  30   304.9s  (296 passos de gerador)  restam ~160 min
+[treino] época  30  perda_c=-0.824  W=+0.863  srnet_bce=0.0035  enganar=8.4537  img_mse=0.00028  msg_bce=0.0035  acuracia_bits=0.9990
+[  val ] época  30  acuracia_bits=0.9994  psnr=35.22dB  ssim=0.9636  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  31   304.9s  (296 passos de gerador)  restam ~155 min
+[treino] época  31  perda_c=-0.838  W=+0.878  srnet_bce=0.0023  enganar=8.6059  img_mse=0.00029  msg_bce=0.0037  acuracia_bits=0.9989
+[  val ] época  31  acuracia_bits=0.9996  psnr=34.58dB  ssim=0.9562  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  32   304.9s  (296 passos de gerador)  restam ~149 min
+[treino] época  32  perda_c=-0.919  W=+0.965  srnet_bce=0.0012  enganar=8.4497  img_mse=0.00032  msg_bce=0.0037  acuracia_bits=0.9989
+[  val ] época  32  acuracia_bits=0.9996  psnr=35.03dB  ssim=0.9541  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  33   305.0s  (296 passos de gerador)  restam ~144 min
+[treino] época  33  perda_c=-0.944  W=+0.991  srnet_bce=0.0023  enganar=8.4243  img_mse=0.00033  msg_bce=0.0042  acuracia_bits=0.9987
+[  val ] época  33  acuracia_bits=0.9975  psnr=34.41dB  ssim=0.9463  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  34   304.9s  (296 passos de gerador)  restam ~138 min
+[treino] época  34  perda_c=-0.980  W=+1.029  srnet_bce=0.0013  enganar=8.5098  img_mse=0.00034  msg_bce=0.0037  acuracia_bits=0.9988
+[  val ] época  34  acuracia_bits=0.9990  psnr=35.03dB  ssim=0.9520  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  35   304.9s  (296 passos de gerador)  restam ~133 min
+[treino] época  35  perda_c=-0.920  W=+0.963  srnet_bce=0.0020  enganar=8.6837  img_mse=0.00032  msg_bce=0.0039  acuracia_bits=0.9988
+[  val ] época  35  acuracia_bits=0.9993  psnr=35.02dB  ssim=0.9594  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  36   305.0s  (296 passos de gerador)  restam ~127 min
+[treino] época  36  perda_c=-0.863  W=+0.903  srnet_bce=0.0007  enganar=9.0467  img_mse=0.00030  msg_bce=0.0040  acuracia_bits=0.9988
+[  val ] época  36  acuracia_bits=0.9994  psnr=35.26dB  ssim=0.9615  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  37   305.0s  (296 passos de gerador)  restam ~122 min
+[treino] época  37  perda_c=-0.835  W=+0.874  srnet_bce=0.0005  enganar=9.1649  img_mse=0.00028  msg_bce=0.0040  acuracia_bits=0.9988
+[  val ] época  37  acuracia_bits=0.9986  psnr=35.49dB  ssim=0.9666  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  38   304.9s  (296 passos de gerador)  restam ~117 min
+[treino] época  38  perda_c=-0.845  W=+0.883  srnet_bce=0.0007  enganar=9.1839  img_mse=0.00029  msg_bce=0.0039  acuracia_bits=0.9988
+[  val ] época  38  acuracia_bits=0.9994  psnr=35.38dB  ssim=0.9628  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  39   304.9s  (296 passos de gerador)  restam ~111 min
+[treino] época  39  perda_c=-0.852  W=+0.893  srnet_bce=0.0003  enganar=9.1401  img_mse=0.00028  msg_bce=0.0039  acuracia_bits=0.9988
+[  val ] época  39  acuracia_bits=0.9988  psnr=35.18dB  ssim=0.9549  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  40   305.0s  (296 passos de gerador)  restam ~106 min
+[treino] época  40  perda_c=-0.935  W=+0.979  srnet_bce=0.0024  enganar=8.8101  img_mse=0.00033  msg_bce=0.0047  acuracia_bits=0.9986
+[  val ] época  40  acuracia_bits=0.9992  psnr=34.70dB  ssim=0.9490  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  41   305.0s  (296 passos de gerador)  restam ~100 min
+[treino] época  41  perda_c=-0.980  W=+1.031  srnet_bce=0.0007  enganar=8.6541  img_mse=0.00034  msg_bce=0.0051  acuracia_bits=0.9984
+[  val ] época  41  acuracia_bits=0.9993  psnr=35.34dB  ssim=0.9572  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  42   304.9s  (296 passos de gerador)  restam ~95 min
+[treino] época  42  perda_c=-0.975  W=+1.022  srnet_bce=0.0010  enganar=8.8134  img_mse=0.00034  msg_bce=0.0042  acuracia_bits=0.9987
+[  val ] época  42  acuracia_bits=0.9989  psnr=35.07dB  ssim=0.9567  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  43   304.9s  (296 passos de gerador)  restam ~90 min
+[treino] época  43  perda_c=-0.948  W=+0.997  srnet_bce=0.0001  enganar=9.1108  img_mse=0.00033  msg_bce=0.0042  acuracia_bits=0.9987
+[  val ] época  43  acuracia_bits=0.9994  psnr=34.50dB  ssim=0.9496  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  44   304.9s  (296 passos de gerador)  restam ~84 min
+[treino] época  44  perda_c=-0.915  W=+0.959  srnet_bce=0.0017  enganar=9.2182  img_mse=0.00032  msg_bce=0.0041  acuracia_bits=0.9987
+[  val ] época  44  acuracia_bits=0.9992  psnr=35.19dB  ssim=0.9577  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  45   304.9s  (296 passos de gerador)  restam ~79 min
+[treino] época  45  perda_c=-0.853  W=+0.890  srnet_bce=0.0005  enganar=9.2602  img_mse=0.00031  msg_bce=0.0040  acuracia_bits=0.9988
+[  val ] época  45  acuracia_bits=0.9995  psnr=34.88dB  ssim=0.9586  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  46   304.9s  (296 passos de gerador)  restam ~74 min
+[treino] época  46  perda_c=-0.862  W=+0.901  srnet_bce=0.0022  enganar=9.1333  img_mse=0.00032  msg_bce=0.0039  acuracia_bits=0.9988
+[  val ] época  46  acuracia_bits=0.9991  psnr=34.79dB  ssim=0.9554  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  47   305.0s  (296 passos de gerador)  restam ~68 min
+[treino] época  47  perda_c=-0.933  W=+0.977  srnet_bce=0.0020  enganar=8.7348  img_mse=0.00033  msg_bce=0.0045  acuracia_bits=0.9986
+[  val ] época  47  acuracia_bits=0.9993  psnr=34.76dB  ssim=0.9506  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  48   305.0s  (296 passos de gerador)  restam ~63 min
+[treino] época  48  perda_c=-0.960  W=+1.004  srnet_bce=0.0011  enganar=8.8813  img_mse=0.00034  msg_bce=0.0042  acuracia_bits=0.9987
+[  val ] época  48  acuracia_bits=0.9989  psnr=34.70dB  ssim=0.9486  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  49   305.0s  (296 passos de gerador)  restam ~58 min
+[treino] época  49  perda_c=-0.989  W=+1.037  srnet_bce=0.0009  enganar=9.0395  img_mse=0.00034  msg_bce=0.0048  acuracia_bits=0.9985
+[  val ] época  49  acuracia_bits=0.9988  psnr=34.19dB  ssim=0.9393  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  50   304.9s  (296 passos de gerador)  restam ~53 min
+[treino] época  50  perda_c=-1.008  W=+1.056  srnet_bce=0.0022  enganar=8.8650  img_mse=0.00037  msg_bce=0.0052  acuracia_bits=0.9984
+[  val ] época  50  acuracia_bits=0.9988  psnr=34.55dB  ssim=0.9443  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  51   305.0s  (296 passos de gerador)  restam ~47 min
+[treino] época  51  perda_c=-0.894  W=+0.936  srnet_bce=0.0010  enganar=9.2943  img_mse=0.00033  msg_bce=0.0043  acuracia_bits=0.9987
+[  val ] época  51  acuracia_bits=0.9994  psnr=33.08dB  ssim=0.9374  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  52   304.9s  (296 passos de gerador)  restam ~42 min
+[treino] época  52  perda_c=-0.856  W=+0.892  srnet_bce=0.0007  enganar=9.4652  img_mse=0.00031  msg_bce=0.0038  acuracia_bits=0.9989
+[  val ] época  52  acuracia_bits=0.9988  psnr=35.02dB  ssim=0.9582  auc_srnet=1.0000 (efetiva 1.0000)  criterios[12.]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  53   305.0s  (296 passos de gerador)  restam ~37 min
+[treino] época  53  perda_c=-0.905  W=+0.945  srnet_bce=0.0008  enganar=9.3119  img_mse=0.00031  msg_bce=0.0046  acuracia_bits=0.9986
+[  val ] época  53  acuracia_bits=0.9989  psnr=34.83dB  ssim=0.9523  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  54   305.0s  (296 passos de gerador)  restam ~31 min
+[treino] época  54  perda_c=-0.935  W=+0.977  srnet_bce=0.0004  enganar=9.4826  img_mse=0.00032  msg_bce=0.0038  acuracia_bits=0.9988
+[  val ] época  54  acuracia_bits=0.9989  psnr=34.66dB  ssim=0.9496  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  55   305.0s  (296 passos de gerador)  restam ~26 min
+[treino] época  55  perda_c=-0.954  W=+0.998  srnet_bce=0.0007  enganar=9.4562  img_mse=0.00032  msg_bce=0.0040  acuracia_bits=0.9987
+[  val ] época  55  acuracia_bits=0.9989  psnr=34.95dB  ssim=0.9527  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  56   305.0s  (296 passos de gerador)  restam ~21 min
+[treino] época  56  perda_c=-0.974  W=+1.020  srnet_bce=0.0005  enganar=9.2372  img_mse=0.00033  msg_bce=0.0047  acuracia_bits=0.9985
+[  val ] época  56  acuracia_bits=0.9987  psnr=34.61dB  ssim=0.9504  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  57   305.0s  (296 passos de gerador)  restam ~16 min
+[treino] época  57  perda_c=-0.981  W=+1.027  srnet_bce=0.0003  enganar=9.4302  img_mse=0.00034  msg_bce=0.0045  acuracia_bits=0.9986
+[  val ] época  57  acuracia_bits=0.9987  psnr=34.32dB  ssim=0.9428  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  58   305.0s  (296 passos de gerador)  restam ~10 min
+[treino] época  58  perda_c=-0.969  W=+1.014  srnet_bce=0.0023  enganar=9.3169  img_mse=0.00035  msg_bce=0.0046  acuracia_bits=0.9986
+[  val ] época  58  acuracia_bits=0.9988  psnr=34.13dB  ssim=0.9384  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  59   305.0s  (296 passos de gerador)  restam ~5 min
+[treino] época  59  perda_c=-0.996  W=+1.044  srnet_bce=0.0019  enganar=9.1304  img_mse=0.00034  msg_bce=0.0056  acuracia_bits=0.9983
+[  val ] época  59  acuracia_bits=0.9988  psnr=34.14dB  ssim=0.9391  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+[tempo ] época  60   304.9s  (296 passos de gerador)  restam ~0 min
+[treino] época  60  perda_c=-0.946  W=+0.988  srnet_bce=0.0020  enganar=8.4748  img_mse=0.00032  msg_bce=0.0052  acuracia_bits=0.9984
+[  val ] época  60  acuracia_bits=0.9989  psnr=34.98dB  ssim=0.9519  auc_srnet=1.0000 (efetiva 1.0000)  criterios[1..]
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_val.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/metricas_treino.csv' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/ckpt_last.pt' are the same file
+
+[fim] checkpoints, amostras e metricas_val.csv em: /content/drive/MyDrive/IC_stego/runs/phase3_bossbase
+[melhor] época 1: acuracia_bits=0.9989  psnr=36.25dB  ssim=0.9739  auc_srnet=0.9978
+
+CRITÉRIOS DE SAÍDA DA FASE 3:
+  (1) acuracia_bits >= 0.99          -> 0.9989  OK
+  (2) PSNR >= 35.3 dB (Fase 2 - 1dB) -> 36.25  OK
+  (3) AUC do laço ~ 0.5              -> 0.9978 (efetiva 0.9978)  detector separando: suba lambda_srnet
+
+ATENÇÃO: o critério (3) mede o detector que participou do treino. Ele NÃO prova
+segurança — pode significar que aquela SRNet não convergiu. A prova é a Fase 4,
+que treina um esteganalisador independente e mede P_E. Ver ROADMAP.md.
+
+[registros] treino.log, metricas_val.csv e metricas_treino.csv em /content/drive/MyDrive/IC_stego/runs/phase3_bossbase
+[espelho] falhou ao copiar para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase: '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' and '/content/drive/MyDrive/IC_stego/runs/phase3_bossbase/treino.log' are the same file
+[espelho] registros e checkpoints copiados para /content/drive/MyDrive/IC_stego/runs/phase3_bossbase

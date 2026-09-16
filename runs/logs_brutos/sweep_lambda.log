@@ -1,0 +1,110 @@
+/home/wille/.local/lib/python3.10/site-packages/torch/utils/data/dataloader.py:666: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  warnings.warn(warn_msg)
+
+========== lambda_image = 1.0 ==========
+[infra] device=cpu
+[dados] max_images=2000 -> usando 2000 imagens
+[dados] 1900 treino / 100 val  (datasets/BOSSbase_1.01)
+[treino] época   1  img_mse=0.01627  msg_bce=0.1532  bit_acc=0.9428
+[  val ] época   1  bit_acc=0.9921  psnr=17.62dB
+[treino] época   2  img_mse=0.01359  msg_bce=0.0243  bit_acc=0.9936
+[  val ] época   2  bit_acc=0.9966  psnr=18.59dB
+[treino] época   3  img_mse=0.01206  msg_bce=0.0137  bit_acc=0.9963
+[  val ] época   3  bit_acc=0.9981  psnr=19.40dB
+[treino] época   4  img_mse=0.01059  msg_bce=0.0091  bit_acc=0.9975
+[  val ] época   4  bit_acc=0.9985  psnr=19.69dB
+[treino] época   5  img_mse=0.01159  msg_bce=0.0080  bit_acc=0.9977
+[  val ] época   5  bit_acc=0.9989  psnr=19.59dB
+[treino] época   6  img_mse=0.01058  msg_bce=0.0060  bit_acc=0.9983
+[  val ] época   6  bit_acc=0.9988  psnr=16.19dB
+[treino] época   7  img_mse=0.01111  msg_bce=0.0055  bit_acc=0.9984
+[  val ] época   7  bit_acc=0.9991  psnr=20.59dB
+[treino] época   8  img_mse=0.01049  msg_bce=0.0046  bit_acc=0.9986
+[  val ] época   8  bit_acc=0.9994  psnr=20.78dB
+
+[fim] checkpoints e amostras em: runs/sweep/lam_img_1
+Se bit_acc(val) ~0.99 e as stego parecem com as cover -> pode ligar a WGAN-GP (Fase 2).
+
+========== lambda_image = 5.0 ==========
+[infra] device=cpu
+[dados] max_images=2000 -> usando 2000 imagens
+[dados] 1900 treino / 100 val  (datasets/BOSSbase_1.01)
+[treino] época   1  img_mse=0.00715  msg_bce=0.1970  bit_acc=0.9164
+[  val ] época   1  bit_acc=0.9870  psnr=21.93dB
+[treino] época   2  img_mse=0.00587  msg_bce=0.0367  bit_acc=0.9878
+[  val ] época   2  bit_acc=0.9921  psnr=22.24dB
+[treino] época   3  img_mse=0.00570  msg_bce=0.0276  bit_acc=0.9902
+[  val ] época   3  bit_acc=0.9911  psnr=21.63dB
+[treino] época   4  img_mse=0.00520  msg_bce=0.0222  bit_acc=0.9920
+[  val ] época   4  bit_acc=0.9944  psnr=22.92dB
+[treino] época   5  img_mse=0.00451  msg_bce=0.0171  bit_acc=0.9939
+[  val ] época   5  bit_acc=0.9957  psnr=23.42dB
+[treino] época   6  img_mse=0.00479  msg_bce=0.0153  bit_acc=0.9946
+[  val ] época   6  bit_acc=0.9921  psnr=22.83dB
+[treino] época   7  img_mse=0.00422  msg_bce=0.0113  bit_acc=0.9961
+[  val ] época   7  bit_acc=0.9979  psnr=23.31dB
+[treino] época   8  img_mse=0.00412  msg_bce=0.0103  bit_acc=0.9966
+[  val ] época   8  bit_acc=0.9955  psnr=23.02dB
+
+[fim] checkpoints e amostras em: runs/sweep/lam_img_5
+Se bit_acc(val) ~0.99 e as stego parecem com as cover -> pode ligar a WGAN-GP (Fase 2).
+
+========== lambda_image = 15.0 ==========
+[infra] device=cpu
+[dados] max_images=2000 -> usando 2000 imagens
+[dados] 1900 treino / 100 val  (datasets/BOSSbase_1.01)
+[treino] época   1  img_mse=0.00485  msg_bce=0.2581  bit_acc=0.8791
+[  val ] época   1  bit_acc=0.9772  psnr=24.05dB
+[treino] época   2  img_mse=0.00337  msg_bce=0.0548  bit_acc=0.9797
+[  val ] época   2  bit_acc=0.9845  psnr=24.19dB
+[treino] época   3  img_mse=0.00321  msg_bce=0.0418  bit_acc=0.9833
+[  val ] época   3  bit_acc=0.9836  psnr=24.86dB
+[treino] época   4  img_mse=0.00305  msg_bce=0.0340  bit_acc=0.9852
+[  val ] época   4  bit_acc=0.9873  psnr=25.46dB
+[treino] época   5  img_mse=0.00283  msg_bce=0.0296  bit_acc=0.9866
+[  val ] época   5  bit_acc=0.9858  psnr=24.80dB
+[treino] época   6  img_mse=0.00251  msg_bce=0.0266  bit_acc=0.9879
+[  val ] época   6  bit_acc=0.9886  psnr=25.35dB
+[treino] época   7  img_mse=0.00228  msg_bce=0.0231  bit_acc=0.9893
+[  val ] época   7  bit_acc=0.9904  psnr=26.32dB
+[treino] época   8  img_mse=0.00235  msg_bce=0.0226  bit_acc=0.9900
+[  val ] época   8  bit_acc=0.9918  psnr=25.10dB
+
+[fim] checkpoints e amostras em: runs/sweep/lam_img_15
+Se bit_acc(val) ~0.99 e as stego parecem com as cover -> pode ligar a WGAN-GP (Fase 2).
+
+========== lambda_image = 40.0 ==========
+[infra] device=cpu
+[dados] max_images=2000 -> usando 2000 imagens
+[dados] 1900 treino / 100 val  (datasets/BOSSbase_1.01)
+[treino] época   1  img_mse=0.00342  msg_bce=0.3333  bit_acc=0.8342
+[  val ] época   1  bit_acc=0.9639  psnr=26.14dB
+[treino] época   2  img_mse=0.00203  msg_bce=0.0795  bit_acc=0.9716
+[  val ] época   2  bit_acc=0.9684  psnr=26.33dB
+[treino] época   3  img_mse=0.00192  msg_bce=0.0592  bit_acc=0.9790
+[  val ] época   3  bit_acc=0.9800  psnr=27.44dB
+[treino] época   4  img_mse=0.00207  msg_bce=0.0487  bit_acc=0.9831
+[  val ] época   4  bit_acc=0.9857  psnr=27.50dB
+[treino] época   5  img_mse=0.00163  msg_bce=0.0382  bit_acc=0.9873
+[  val ] época   5  bit_acc=0.9891  psnr=27.65dB
+[treino] época   6  img_mse=0.00176  msg_bce=0.0350  bit_acc=0.9882
+[  val ] época   6  bit_acc=0.9904  psnr=27.59dB
+[treino] época   7  img_mse=0.00151  msg_bce=0.0286  bit_acc=0.9905
+[  val ] época   7  bit_acc=0.9914  psnr=27.57dB
+[treino] época   8  img_mse=0.00165  msg_bce=0.0303  bit_acc=0.9899
+[  val ] época   8  bit_acc=0.9915  psnr=27.84dB
+
+[fim] checkpoints e amostras em: runs/sweep/lam_img_40
+Se bit_acc(val) ~0.99 e as stego parecem com as cover -> pode ligar a WGAN-GP (Fase 2).
+
+
+==================== RESUMO DO SWEEP ====================
+lambda_image |  bit_acc | PSNR (dB)
+--------------------------------------
+           1 |   0.9994 |     20.78
+           5 |   0.9955 |     23.02
+          15 |   0.9918 |     25.10
+          40 |   0.9915 |     27.84
+
+Leitura: subir lambda_image melhora o PSNR (imperceptibilidade)
+mas tende a derrubar bit_acc. Esse é o trade-off que a Fase 2 (WGAN-GP) reequilibra.

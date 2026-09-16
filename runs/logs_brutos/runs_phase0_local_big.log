@@ -1,0 +1,8 @@
+[infra] device=cpu  payload=0.0625 bpp  (msg_size=32, image_size=128)
+[dados] 9500 treino / 500 val  (datasets/BOSSbase_1.01)
+/home/wille/Desktop/estudo_gan/IC_stego/phase0_encoder_decoder.py:313: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = torch.cuda.amp.GradScaler(enabled=use_amp)
+/home/wille/.local/lib/python3.10/site-packages/torch/utils/data/dataloader.py:666: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  warnings.warn(warn_msg)
+/home/wille/Desktop/estudo_gan/IC_stego/phase0_encoder_decoder.py:326: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=use_amp):
