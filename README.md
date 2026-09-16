@@ -42,20 +42,6 @@ datasets/        symlink para ../IC_stego/datasets (não versionado)
 runs/            registro dos treinos: logs, CSVs de métricas e checkpoints
 ```
 
-## Como rodar
-
-```bash
-pip install -r requisitos.txt
-
-python3 experimentos/treino_local_cpu.py # teste rápido em CPU
-python3 figuras/curva_denso_residual.py  # refaz a figura da comparação
-```
-
-Os treinos que fecham as fases rodam em GPU, pelos notebooks em `notebooks/`. Os scripts de
-`figuras/`, `resumo/` e `ferramentas/` resolvem os caminhos a partir da raiz do repositório —
-podem ser chamados de qualquer diretório.
-
-
 ## Referência
 
 Este trabalho dá continuidade ao **STEGS2GAN** (Souza; Correia; Trevisani, 2026), do qual
