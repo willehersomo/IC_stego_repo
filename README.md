@@ -8,8 +8,6 @@ um componente sobre uma base que já funciona, com critérios de saída declarad
 treino. Assim, qualquer instabilidade de convergência tem causa única e identificável, e cada
 resultado pode ser atribuído ao componente que o produziu.
 
-O plano completo, com o registro de cada run e as decisões tomadas, está no **[ROADMAP.md](ROADMAP.md)**.
-
 ## Resultados até aqui
 
 BOSSBase 1.01, tons de cinza, 128 × 128, carga de 1.024 bits por imagem (0,0625 bpp).
