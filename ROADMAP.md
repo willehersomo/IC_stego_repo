@@ -1,14 +1,14 @@
 # Roadmap de fases — IC esteganografia com GANs
 
-Princípio do projeto: **construir em camadas**. Cada fase adiciona *uma* peça sobre uma base
+Princípio do projeto: construir em camadas. Cada fase adiciona uma peça sobre uma base
 que já funciona, para que qualquer instabilidade de convergência tenha uma causa única e
 identificável. Nunca tudo de uma vez.
 
-Cada fase abaixo declara: o que muda, de que depende, e os **critérios de saída** — as
-condições que precisam valer antes de passar para a seguinte.
+Cada fase abaixo declara: o que muda, de que depende, e os critérios de saída  (as
+condições que precisam valer antes de passar para a seguinte).
 
 > **Revisão de 07/09/2026.** Quatro decisões de escopo entraram nesta versão:
-> (1) o gerador ganha **blocos residuais** no modelo do STEGS2GAN — nova **Fase 2.5**;
+> (1) o gerador ganha blocos residuais no modelo do STEGS2GAN — nova Fase 2.5;
 > (2) o esteganalisador do laço da Fase 3 deixa de ser fixado na SRNet e passa a ser um
 > detector **moderno**; (3) a Fase 4 passa a medir com **dois** detectores independentes,
 > um moderno e a SRNet como linha comparável com a literatura; (4) a Fase 8 (robustez a
