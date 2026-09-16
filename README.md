@@ -1,10 +1,10 @@
 # Esteganografia em imagens digitais com redes adversárias generativas
 
-Iniciação científica — IFSP, Câmpus Presidente Epitácio.
+Iniciação científica - IFSP, Câmpus Presidente Epitácio.
 Breno W. B. Correia (discente) · Kleber M. Trevisani (orientador).
 
-O trabalho constrói um modelo de esteganografia por GAN **em camadas**: cada fase acrescenta
-*um* componente sobre uma base que já funciona, com critérios de saída declarados antes do
+O trabalho constrói um modelo de esteganografia por GAN em camadas: cada fase acrescenta
+um componente sobre uma base que já funciona, com critérios de saída declarados antes do
 treino. Assim, qualquer instabilidade de convergência tem causa única e identificável, e cada
 resultado pode ser atribuído ao componente que o produziu.
 
@@ -22,9 +22,7 @@ BOSSBase 1.01, tons de cinza, 128 × 128, carga de 1.024 bits por imagem (0,0625
 | 3 | esteganalisador no laço | — | — | — | — | 1º run reprovado |
 
 A Fase 2.5 é a melhor configuração medida. O ganho não é um pico: as 60 épocas do gerador
-residual ficam acima de 36,30 dB, que era o *melhor ponto isolado* do gerador denso. O
-confundidor a declarar é que o gerador residual tem 2,13× mais parâmetros a igual largura de
-camada — a ablação a igual número de parâmetros está prevista na Fase 5.
+residual ficam acima de 36,30 dB, que era o melhor ponto isolado do gerador denso. 
 
 ## Estrutura
 
@@ -51,48 +49,12 @@ pip install -r requisitos.txt
 
 python3 experimentos/treino_local_cpu.py # teste rápido em CPU
 python3 figuras/curva_denso_residual.py  # refaz a figura da comparação
-python3 resumo/gerar_resumo_docx.py      # refaz o resumo expandido
 ```
 
 Os treinos que fecham as fases rodam em GPU, pelos notebooks em `notebooks/`. Os scripts de
 `figuras/`, `resumo/` e `ferramentas/` resolvem os caminhos a partir da raiz do repositório —
 podem ser chamados de qualquer diretório.
 
-## O que não está versionado, e por quê
-
-| Item | Onde está | Motivo |
-|---|---|---|
-| `datasets/` (6,6 GB) | symlink para `../IC_stego/datasets` | tamanho |
-| `*.pt` (~31 MB) | no disco local e no Google Drive | git não lida bem com binários que mudam a cada run |
-| `runs/**/samples_epoch*.png` | no disco local | centenas de PNGs por run, regeneráveis |
-| `resumo/resumo_mc2t_2026.docx` | gerado por `resumo/gerar_resumo_docx.py` | saída regenerável; o gabarito `modelo_mc2t_2026.docx` está versionado |
-
-Os checkpoints são o ativo mais frágil do projeto — as Fases 0 e 2 quase se perderam quando
-uma sessão do Colab caiu. Todo run espelha o `ckpt_best.pt` para fora do ambiente efêmero;
-veja a Fase 2R no ROADMAP.
-
-## Duas convenções que parecem inconsistência e não são
-
-**As pastas em `runs/` mantêm os nomes em inglês** (`phase0_bossbase`, `phase2_residual`).
-Esses nomes estão gravados dentro dos CSVs e dos logs já produzidos.
-Renomeá-los invalidaria o registro histórico — é o mesmo motivo pelo qual a numeração
-fracionária 2.5 foi preferida a renumerar as fases seguintes. Só os módulos `.py` foram
-traduzidos.
-
-**Os outputs de `notebooks/fase2_colab.ipynb` citam nomes antigos de arquivo.** É proposital:
-aqueles outputs são o *único* registro do treino denso da Fase 2, e o
-`ferramentas/logs_para_csv.py` extrai o log de treino de dentro deles. Editá-los seria
-adulterar o registro.
-
-## Notebooks e duplicação de código
-
-Os notebooks do Colab são autossuficientes: contêm células `%%writefile` que gravam os
-módulos no ambiente, sem precisar de upload. Isso duplica o código-fonte entre `.py` e
-`.ipynb`, e as cópias já divergiram duas vezes. Nesta organização as células são
-**cópia byte a byte de `modelo/` e `ferramentas/`**, que passam a ser a fonte única.
-
-Ao alterar um módulo, regenere as células antes de rodar no Colab — ou troque os
-`%%writefile` por um `git clone` deste repositório, que elimina a duplicação de vez.
 
 ## Referência
 
