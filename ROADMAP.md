@@ -1,4 +1,4 @@
-# Roadmap de fases — IC esteganografia com GANs
+# Roadmap de fases 
 
 Princípio do projeto: construir em camadas. Cada fase adiciona uma peça sobre uma base
 que já funciona, para que qualquer instabilidade de convergência tenha uma causa única e
