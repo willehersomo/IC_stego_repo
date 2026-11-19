@@ -4,11 +4,8 @@ torchvision==0.23.0
 pillow==12.0.0
 numpy==2.2.6
 
+# Fase 4.0 — EfficientNet-B0
+timm
+
 # Figuras
 matplotlib==3.10.9
-
-# Resumo expandido (resumo/gerar_resumo_docx.py)
-python-docx==1.2.0
-
-# Opcional — só para ferramentas/gerar_relatorio_pdf.py
-# weasyprint
