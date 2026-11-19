@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import fase0_codificador_decodificador as base   # reusa arquitetura, loaders e métricas da Fase 0
+import fase0_codificador_decodificador as base
 
 
 CONFIG = dict(base.CONFIG)
@@ -18,12 +18,12 @@ CONFIG.update({
     "lambda_gp": 10.0,         
     "largura_critico": 64,     
     "lr_critico": 1e-4,       
-    "beta1": 0.0, "beta2": 0.9,  # betas do Adam (recomendado p/ WGAN-GP)
+    "beta1": 0.0, "beta2": 0.9,
 
     "taxa_aprend": 1e-4,      
     "epocas": 60,
-    "usar_amp": False,         # GP + AMP não combinam
-    "carregar_fase0": "runs/phase0_bossbase/ckpt_best.pt",  # warm start; None = do zero
+    "usar_amp": False,
+    "carregar_fase0": "runs/phase0_bossbase/ckpt_best.pt",
     "pasta_saida": "runs/phase2_bossbase",
 })
 
@@ -41,25 +41,25 @@ class Critico(nn.Module):
         super().__init__()
 
         def bloco(entrada, saida, norm=True):
-            camadas = [nn.Conv2d(entrada, saida, 4, stride=2, padding=1)]  # reduz H,W pela metade
+            camadas = [nn.Conv2d(entrada, saida, 4, stride=2, padding=1)]
             if norm:
                 camadas.append(nn.InstanceNorm2d(saida, affine=True))
             camadas.append(nn.LeakyReLU(0.2, inplace=True))
             return nn.Sequential(*camadas)
 
         self.corpo = nn.Sequential(
-            bloco(canais, largura, norm=False),   # 1ª camada sem norm
+            bloco(canais, largura, norm=False),
             bloco(largura, largura * 2),
             bloco(largura * 2, largura * 4),
             bloco(largura * 4, largura * 8),
         )
-        self.pool = nn.AdaptiveAvgPool2d(1)          # vira (B, C, 1, 1) p/ qualquer tamanho de entrada
-        self.para_score = nn.Linear(largura * 8, 1)  # score escalar por imagem
+        self.pool = nn.AdaptiveAvgPool2d(1)
+        self.para_score = nn.Linear(largura * 8, 1)
 
     def forward(self, x):
         h = self.corpo(x)
-        h = self.pool(h).flatten(1)     # (B, C)
-        return self.para_score(h).squeeze(1)  # (B,)
+        h = self.pool(h).flatten(1)
+        return self.para_score(h).squeeze(1)
 
 
 def penalidade_gradiente(critico, reais, falsas, dispositivo):
@@ -75,6 +75,38 @@ def penalidade_gradiente(critico, reais, falsas, dispositivo):
     )[0]
     grads = grads.reshape(b, -1)
     return ((grads.norm(2, dim=1) - 1.0) ** 2).mean()
+
+
+def auc_binaria(scores, rotulos):
+    """AUC pela estatística de Mann-Whitney (equivale à área sob a curva ROC)."""
+    scores = scores.detach().float().flatten()
+    rotulos = rotulos.detach().float().flatten()
+    n_pos = int(rotulos.sum().item())
+    n_neg = int(rotulos.numel() - n_pos)
+    if n_pos == 0 or n_neg == 0:
+        return float("nan")
+
+    ordem = torch.argsort(scores)
+    postos = torch.empty_like(scores)
+    postos[ordem] = torch.arange(1, scores.numel() + 1, dtype=scores.dtype, device=scores.device)
+    soma_postos_pos = postos[rotulos == 1].sum().item()
+    return (soma_postos_pos - n_pos * (n_pos + 1) / 2.0) / (n_pos * n_neg)
+
+
+@torch.no_grad()
+def avaliar_critico(codificador, critico, loader, cfg):
+    """Separabilidade portadora x estego PELO SCORE DO CRÍTICO, em AUC."""
+    codificador.eval(); critico.eval()
+    scores, rotulos = [], []
+    for portadora in loader:
+        portadora = portadora.to(cfg["dispositivo"])
+        b = portadora.size(0)
+        mensagem = base.mensagem_aleatoria(b, cfg)
+        estego = codificador(portadora, base.espalhar_mensagem(mensagem, cfg))
+        scores.append(critico(torch.cat([portadora, estego], dim=0)).cpu())
+        rotulos.append(torch.cat([torch.zeros(b), torch.ones(b)]))
+    codificador.train(); critico.train()
+    return auc_binaria(torch.cat(scores), torch.cat(rotulos))
 
 
 def treinar():
@@ -93,7 +125,6 @@ def treinar():
     decodificador = base.Decodificador(cfg["canais"], cfg["profundidade_dados"], cfg["largura"]).to(dispositivo)
     critico = Critico(cfg["canais"], cfg["largura_critico"]).to(dispositivo)
 
-    # --- warm start da Fase 0 (colocar o adversário sobre uma base que já funciona) 
     ck = cfg.get("carregar_fase0")
     if ck and os.path.exists(ck):
         estado = torch.load(ck, map_location=dispositivo)
@@ -104,13 +135,12 @@ def treinar():
         print(f"[warm start] {ck!r} não encontrado -> treinando do zero "
               "(recomendado rodar a Fase 0 antes)")
 
-    # gerador = codificador + decodificador (treinados juntos); crítico separado
     opt_g = torch.optim.Adam(list(codificador.parameters()) + list(decodificador.parameters()),
                              lr=cfg["taxa_aprend"], betas=(cfg["beta1"], cfg["beta2"]))
     opt_c = torch.optim.Adam(critico.parameters(),
                              lr=cfg["lr_critico"], betas=(cfg["beta1"], cfg["beta2"]))
 
-    melhor = {"score": -1.0, "epoca": 0, "acuracia_bits": 0.0, "psnr": 0.0, "ssim": 0.0}
+    melhor = {"score": float("-inf"), "epoca": 0, "acuracia_bits": 0.0, "psnr": 0.0, "ssim": 0.0}
 
     for epoca in range(1, cfg["epocas"] + 1):
         codificador.train(); decodificador.train(); critico.train()
@@ -120,21 +150,18 @@ def treinar():
             portadora = portadora.to(dispositivo, non_blocking=True)
             b = portadora.size(0)
 
-            # ============ 1) treina o CRÍTICO n_critic vezes ============
             for _ in range(cfg["n_critic"]):
                 mensagem = base.mensagem_aleatoria(b, cfg)
-                with torch.no_grad():                       # não propaga p/ o gerador aqui
+                with torch.no_grad():
                     estego = codificador(portadora, base.espalhar_mensagem(mensagem, cfg))
                 score_real = critico(portadora).mean()
                 score_falsa = critico(estego).mean()
                 gp = penalidade_gradiente(critico, portadora, estego, dispositivo)
-                # crítico MINIMIZA:  E[C(falsa)] - E[C(real)] + lambda_gp * GP
                 perda_c = score_falsa - score_real + cfg["lambda_gp"] * gp
                 opt_c.zero_grad(); perda_c.backward(); opt_c.step()
 
-            w_dist = (score_real - score_falsa).item()      # estimativa da distância de Wasserstein
+            w_dist = (score_real - score_falsa).item()
 
-            # ============ 2) treina o GERADOR 1 vez ============
             mensagem = base.mensagem_aleatoria(b, cfg)
             estego = codificador(portadora, base.espalhar_mensagem(mensagem, cfg))
             logits = base.agregar_logits(decodificador(estego), cfg)
@@ -142,7 +169,7 @@ def treinar():
             perda_img = F.mse_loss(estego, portadora)
             perda_msg = F.binary_cross_entropy_with_logits(logits, mensagem)
             perda_res = (estego - portadora).abs().mean()
-            perda_adv = -critico(estego).mean()             # gerador quer SUBIR o score da estego
+            perda_adv = -critico(estego).mean()
             perda_g = (cfg["lambda_imagem"] * perda_img
                        + cfg["lambda_mensagem"] * perda_msg
                        + cfg["lambda_residuo"] * perda_res
@@ -160,11 +187,12 @@ def treinar():
               f"adv={ac['adv']/n:+.3f}  img_mse={ac['img']/n:.5f}  "
               f"msg_bce={ac['msg']/n:.4f}  acuracia_bits={ac['acc']/n:.4f}")
 
-        # --- validação (reusa a métrica da Fase 0) + amostras ---
         val = base.avaliar(codificador, decodificador, loader_val, cfg)
+        auc_c = avaliar_critico(codificador, critico, loader_val, cfg)
         ok = "OK" if (val["acuracia_bits"] >= cfg["alvo_bitacc"] and val["psnr"] >= 35.0) else "  "
         print(f"[  val ] época {epoca:3d}  acuracia_bits={val['acuracia_bits']:.4f}  "
-              f"psnr={val['psnr']:.2f}dB  ssim={val['ssim']:.4f}  linf={val['linf']:.4f}  {ok}")
+              f"psnr={val['psnr']:.2f}dB  ssim={val['ssim']:.4f}  linf={val['linf']:.4f}  "
+              f"auc_critico={auc_c:.4f} (efetiva {max(auc_c, 1 - auc_c):.4f})  {ok}")
 
         score = (val["psnr"] if val["acuracia_bits"] >= cfg["alvo_bitacc"]
                  else val["acuracia_bits"] - 100.0)

@@ -62,14 +62,32 @@ class DecodificadorResidual(nn.Module):
 _ORIGINAIS = {"Codificador": base.Codificador, "Decodificador": base.Decodificador}
 _ATUAL = "denso"
 
-BLOCOS_RESIDUAIS = 3   # o STEGS2GAN usa 3
+_EXTRAS = {}
+
+
+def registrar(nome, fabrica_cod, fabrica_dec=None):
+    """Registra uma arquitetura extra para `usar(nome)`."""
+    _EXTRAS[nome] = (fabrica_cod, fabrica_dec)
+    return nome
+
+BLOCOS_RESIDUAIS = 3
 
 
 def usar(arquitetura):
 
     global _ATUAL
+    if arquitetura in _EXTRAS:
+        fab_cod, fab_dec = _EXTRAS[arquitetura]
+        base.Codificador = fab_cod
+        base.Decodificador = fab_dec or (
+            lambda c, p, l=32: DecodificadorResidual(c, p, l, BLOCOS_RESIDUAIS))
+        _ATUAL = arquitetura
+        print(f"[arquitetura] gerador = {arquitetura}")
+        return arquitetura
+
     if arquitetura not in ("denso", "residual"):
-        raise ValueError('arquitetura deve ser "denso" ou "residual"')
+        raise ValueError('arquitetura deve ser "denso", "residual" ou uma registrada: '
+                         + ", ".join(sorted(_EXTRAS)) or "(nenhuma)")
 
     if arquitetura == "denso":
         base.Codificador = _ORIGINAIS["Codificador"]
@@ -165,7 +183,7 @@ def espelhar(pasta, destino):
 
 
 def _rodar(modulo, cfg_extra, pasta_saida, espelho, rotulo):
-    rotulo = f"{rotulo} ({_ATUAL})"     # o braço denso também passa por aqui, na sanidade
+    rotulo = f"{rotulo} ({_ATUAL})"
     modulo.CONFIG.update(base.COLAB_GPU)
     modulo.CONFIG.update(cfg_extra)
     modulo.CONFIG["pasta_saida"] = pasta_saida
@@ -200,7 +218,7 @@ def treinar_fase2(pasta_saida, espelho=None, **cfg_extra):
 
 
 ALVO_ACURACIA = 0.99
-ALVO_PSNR_FASE2 = 36.30      # o que a Fase 2 densa entregou; não pode regredir
+ALVO_PSNR_FASE2 = 36.30
 
 
 def _ler_csv(caminho):

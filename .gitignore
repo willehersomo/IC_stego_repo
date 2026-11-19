@@ -10,8 +10,6 @@ datasets
 # --- Amostras de treino: centenas de PNGs por run, regeneráveis ---
 runs/**/samples_epoch*.png
 
-# --- Saída regenerável do resumo (o gabarito modelo_mc2t_2026.docx fica versionado) ---
-resumo/resumo_mc2t_2026.docx
 
 # --- Python ---
 __pycache__/
@@ -24,3 +22,8 @@ venv/
 .~lock.*#
 .vscode/
 .idea/
+
+# --- Só no disco, fora do repositório público 
+  ---
+ROADMAP.md
+ferramentas/

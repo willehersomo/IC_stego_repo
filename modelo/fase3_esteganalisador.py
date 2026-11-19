@@ -1,56 +1,3 @@
-"""
-Fase 3 — Indetectabilidade dirigida: SRNet como 2º adversário.
-
-O que muda em relação à Fase 2:
-  - Entra um SEGUNDO adversário, a SRNet (Boroumand, Chen e Fridrich, 2019). Os dois
-    adversários cobram coisas diferentes do gerador e por isso convivem:
-      * Crítico WGAN-GP -> REALISMO. Score escalar de "quão natural é esta imagem".
-      * SRNet           -> INDETECTABILIDADE. Classificador portadora vs. estego, treinado
-                           para achar o micro-ruído residual que a ocultação deixa.
-    Uma imagem pode ser perfeitamente realista e ainda assim ter assinatura estatística
-    detectável — é exatamente essa lacuna que a SRNet fecha.
-  - A perda do gerador ganha um 4º termo: enganar a SRNet (fazer a estego ser classificada
-    como portadora).
-
-Por que a SRNet e não outro detector:
-  - Ela não usa filtro passa-alta fixo: aprende o residual sozinha.
-  - As 7 primeiras camadas NÃO têm pooling, de propósito. Pooling é filtro passa-baixa e
-    destruiria justamente o sinal de alta frequência que denuncia a esteganografia. A redução
-    de resolução só começa na camada 8.
-
-Warm start: gerador e crítico vêm da Fase 2 (ckpt_best). A SRNet começa DO ZERO — um detector
-pré-treinado contra outro gerador entra viciado e mede a coisa errada.
-
-CRITÉRIOS DE SAÍDA da Fase 3 (os três precisam valer):
-  (1) recuperação:        acuracia_bits(val) >= 0.99   (não regredir o que a Fase 1 conquistou)
-  (2) imperceptibilidade: PSNR(val) não cair mais que ~1 dB em relação aos 36,30 dB da Fase 2
-  (3) o detector do laço estacionar perto do acaso (AUC ~ 0.5)
-
->>> LEIA ISTO ANTES DE COMEMORAR O CRITÉRIO (3) <<<
-A AUC reportada aqui é a do detector que PARTICIPOU DO TREINO. Ela pode estar em 0,5 porque o
-gerador ficou bom OU porque aquela instância de SRNet não convergiu — os dois casos produzem o
-mesmo número. Uma AUC de 0,5 no laço NÃO é evidência de segurança; é evidência sobre aquele
-adversário específico. A prova real é a Fase 4, que treina um esteganalisador independente e
-mede P_E. Ver ROADMAP.md.
-E lembre da simetria: AUC abaixo de 0,5 não é "melhor que aleatório". Significa que o detector
-aprendeu a separação com os rótulos invertidos, e basta inverter a regra de decisão. Por isso
-o log imprime também max(AUC, 1-AUC).
-
-O QUE O GERADOR PEDE À SRNet (cfg["alvo_srnet"]) — importa mais do que parece:
-  - "portadora" (alvo 0) é o objetivo clássico de "enganar o classificador". Ele NÃO tem mínimo
-    no equilíbrio: a perda decresce monotonicamente conforme o logit vai a -infinito, então o
-    ótimo é "mais portadora que as portadoras". O gerador passa do ponto e a AUC despenca ABAIXO
-    de 0,5 — as imagens voltam a ser separáveis, agora com o sinal trocado.
-  - "equilibrio" (alvo suave 0,5) tem mínimo EXATO em probabilidade 0,5, que é literalmente
-    "o detector não consegue decidir". É o default, e é o que a Fase 3 quer.
-  Com "equilibrio", a coluna `enganar` passa a ter piso em ln 2 ~ 0,693 em vez de 0: 0,693 é o
-  equilíbrio perfeito, e valores acima indicam separação — em qualquer das duas direções.
-
-Reaproveita: Codificador/Decodificador/loaders/métricas da Fase 0; Crítico e penalidade de
-gradiente da Fase 2.
-
-Rodar:  python3.10 fase3_esteganalisador.py
-"""
 import os
 import csv
 import time
@@ -62,72 +9,48 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import fase0_codificador_decodificador as base    # Codificador, Decodificador, loaders, métricas
-import fase2_wgan_gp as fase2            # Critico, penalidade_gradiente
+import fase0_codificador_decodificador as base
+import fase2_wgan_gp as fase2
+import fase25_residual as fase25
 
 
-# ---------------------------------------------------------------------------
-# CONFIG — herda TODAS as chaves da Fase 2 (que já herda as da Fase 0).
-# ---------------------------------------------------------------------------
 CONFIG = dict(fase2.CONFIG)
 CONFIG.update({
-    # --- 2º adversário (SRNet) ---
-    # Limiar do critério (2). A Fase 2 fechou em 36,30 dB; o ROADMAP admite cair no máximo
-    # ~1 dB. Fica em cfg para que a marca por época e o veredito final usem O MESMO número —
-    # antes a marca usava 35,0 e o veredito 35,3, e épocas como 35,06/35,22 apareciam
-    # aprovadas no log e reprovavam no fim.
-    "alvo_psnr": 35.3,
 
-    "lambda_srnet": 0.01,      # peso do termo "enganar a SRNet" no gerador. É O NOVO KNOB.
-                               # Mesmo trade-off do lambda_adv: alto demais derruba a acurácia
-                               # de bits, baixo demais não muda nada. Comece em 0,01 e suba.
-    "n_srnet": 1,              # passos da SRNet por passo do gerador. Custa ~+22% no tempo por
-                               # passo (o gargalo é o gerador denso, não a SRNet). Suba para 2
-                               # se a srnet_bce ficar travada em ~0,69 (detector não aprendeu).
-    "alvo_srnet": "equilibrio", # O QUE o gerador pede à SRNet. Ver nota no topo do arquivo.
-                               #  "equilibrio" -> alvo suave 0,5: mínimo exato em "o detector não
-                               #                  consegue decidir". É o que a Fase 3 quer.
-                               #  "portadora"  -> alvo 0: decresce sem parar, o gerador passa do
-                               #                  ponto e a AUC cai ABAIXO de 0,5. Só para comparar.
-    "lr_srnet": 1e-4,          # learning rate da SRNet
-    "srnet_compacta": False,   # True = metade dos filtros. Use para uma primeira rodada rápida
-                               # de sanidade; os resultados finais devem ser com a SRNet cheia.
+    "arquitetura": "residual",
 
-    # --- treino ---
+    "alvo_psnr": None,
+
+    "lambda_srnet": 0.01,
+    "n_srnet": 1,
+    "alvo_srnet": "equilibrio",
+    "lr_srnet": 1e-4,
+    "srnet_compacta": False,
+
     "epocas": 60,
-    "usar_amp": False,         # a GP do crítico continua no laço; ver docstring da Fase 2
-    "carregar_fase0": None,    # superado: o warm start agora vem da Fase 2
-    "carregar_fase2": "runs/phase2_bossbase/ckpt_best.pt",
+    "usar_amp": False,
+    "carregar_fase0": None,
+    "carregar_fase2": "runs/phase2_residual/ckpt_best.pt",
+
+
+    "retomar_de": None,
+
+    "salvar_otimizadores": True,
     "pasta_saida": "runs/phase3_bossbase",
 
-    # --- persistência ---
-    # Espelha ckpt_best.pt para fora do ambiente efêmero a cada melhoria. No Colab, aponte
-    # para o Drive montado. Foi a ausência disto que fez os pesos das Fases 0 e 2 se perderem.
-    "espelho_ckpt": None,      # ex.: "/content/drive/MyDrive/IC_stego/phase3"
+    "espelho_ckpt": None,     
 })
 
-# Preset GPU (Colab): junta o preset da Fase 2 com os ajustes do 2º adversário.
 COLAB_GPU = dict(fase2.COLAB_GPU)
 COLAB_GPU.update({
     "epocas": 60,
     "lambda_srnet": 0.01,
     "usar_amp": False,
-    # Detecta as CPUs da máquina em vez de fixar um número: o T4 do Colab tem 2 vCPU e a L4
-    # tem 8. Fixar 4 gera aviso no T4 e desperdiça a L4.
+
     "num_trabalhadores": max(1, min(4, (os.cpu_count() or 2) - 1)),
 })
 
 
-# ---------------------------------------------------------------------------
-# SRNet — esteganalisador profundo (Boroumand, Chen e Fridrich, 2019)
-#
-# Quatro tipos de camada, nesta ordem:
-#   Tipo 1 (x2)  conv-BN-ReLU                       -> extrai o residual, sem reduzir resolução
-#   Tipo 2 (x5)  residual: conv-BN-ReLU-conv-BN + atalho
-#   Tipo 3 (x4)  residual com redução: mesmo ramo + avg-pool 3x3 stride 2; atalho 1x1 stride 2
-#   Tipo 4 (x1)  conv-BN + global average pooling   -> vetor de estatísticas da imagem
-# Depois: uma camada linear -> 1 logit (portadora vs. estego).
-# ---------------------------------------------------------------------------
 class _Tipo1(nn.Module):
     def __init__(self, entrada, saida):
         super().__init__()
@@ -139,7 +62,6 @@ class _Tipo1(nn.Module):
 
 
 class _Tipo2(nn.Module):
-    """Residual sem redução de resolução: saída = x + F(x)."""
     def __init__(self, canais):
         super().__init__()
         self.c1 = nn.Conv2d(canais, canais, 3, padding=1, bias=False)
@@ -154,7 +76,6 @@ class _Tipo2(nn.Module):
 
 
 class _Tipo3(nn.Module):
-    """Residual COM redução: ramo principal termina em avg-pool; atalho é conv 1x1 stride 2."""
     def __init__(self, entrada, saida):
         super().__init__()
         self.c1 = nn.Conv2d(entrada, saida, 3, padding=1, bias=False)
@@ -172,7 +93,6 @@ class _Tipo3(nn.Module):
 
 
 class _Tipo4(nn.Module):
-    """Última convolução + global average pooling -> (B, canais)."""
     def __init__(self, entrada, saida):
         super().__init__()
         self.c = nn.Conv2d(entrada, saida, 3, padding=1, bias=False)
@@ -180,7 +100,7 @@ class _Tipo4(nn.Module):
 
     def forward(self, x):
         h = F.relu(self.b(self.c(x)), inplace=True)
-        return h.mean(dim=(2, 3))          # média espacial global
+        return h.mean(dim=(2, 3))
 
 
 class SRNet(nn.Module):
@@ -202,42 +122,18 @@ class SRNet(nn.Module):
         self.para_logit = nn.Linear(f(512), 1)
 
     def forward(self, x):
-        h = self.tipo1(x)      # sem pooling: preserva o residual de alta frequência
-        h = self.tipo2(h)      # ainda sem pooling
-        h = self.tipo3(h)      # a partir daqui, reduz resolução
-        h = self.tipo4(h)      # (B, C)
-        return self.para_logit(h).squeeze(1)   # (B,)
+        h = self.tipo1(x)
+        h = self.tipo2(h)
+        h = self.tipo3(h)
+        h = self.tipo4(h)
+        return self.para_logit(h).squeeze(1)
 
-
-# ---------------------------------------------------------------------------
-# Métrica de detecção
-# ---------------------------------------------------------------------------
-def auc_binaria(scores, rotulos):
-    """AUC pela estatística de Mann-Whitney (equivale à área sob a curva ROC).
-
-    scores  : tensor (N,) — saída contínua do detector
-    rotulos : tensor (N,) — 1 = estego, 0 = portadora
-
-    Interpretação: 0,5 = classificador aleatório. Independe do limiar de decisão, e é por
-    isso que ela vale mais do que a acurácia para julgar um detector.
-    """
-    scores = scores.detach().float().flatten()
-    rotulos = rotulos.detach().float().flatten()
-    n_pos = int(rotulos.sum().item())
-    n_neg = int(rotulos.numel() - n_pos)
-    if n_pos == 0 or n_neg == 0:
-        return float("nan")
-
-    ordem = torch.argsort(scores)
-    postos = torch.empty_like(scores)
-    postos[ordem] = torch.arange(1, scores.numel() + 1, dtype=scores.dtype, device=scores.device)
-    soma_postos_pos = postos[rotulos == 1].sum().item()
-    return (soma_postos_pos - n_pos * (n_pos + 1) / 2.0) / (n_pos * n_neg)
+auc_binaria = fase2.auc_binaria
 
 
 @torch.no_grad()
 def avaliar_srnet(codificador, srnet, loader, cfg):
-    """Roda a SRNet sobre pares (portadora, estego) da validação e devolve AUC e acurácia."""
+
     dispositivo = cfg["dispositivo"]
     codificador.eval(); srnet.eval()
     todos_scores, todos_rotulos = [], []
@@ -248,27 +144,35 @@ def avaliar_srnet(codificador, srnet, loader, cfg):
         mensagem = base.mensagem_aleatoria(b, cfg)
         estego = codificador(portadora, base.espalhar_mensagem(mensagem, cfg))
 
-        logits = srnet(torch.cat([portadora, estego], dim=0)).cpu()   # lote único, como no treino
+        logits = srnet(torch.cat([portadora, estego], dim=0)).cpu()
         todos_scores.append(logits)
         todos_rotulos.append(torch.cat([torch.zeros(b), torch.ones(b)]))
 
     scores = torch.cat(todos_scores)
     rotulos = torch.cat(todos_rotulos)
     auc = auc_binaria(scores, rotulos)
-    acc = ((scores > 0).float() == rotulos).float().mean().item()
-    return {"auc": auc, "acuracia_deteccao": acc}
+
+    predito = (scores > 0).float()
+    vp = float(((predito == 1) & (rotulos == 1)).sum())
+    fp = float(((predito == 1) & (rotulos == 0)).sum())
+    fn = float(((predito == 0) & (rotulos == 1)).sum())
+    acc = (predito == rotulos).float().mean().item()
+    precisao = vp / (vp + fp) if (vp + fp) > 0 else float("nan")
+    recall = vp / (vp + fn) if (vp + fn) > 0 else float("nan")
+    f1 = (2 * precisao * recall / (precisao + recall)
+          if (precisao == precisao and recall == recall and precisao + recall > 0)
+          else float("nan"))
+    return {"auc": auc, "acuracia_deteccao": acc, "precisao": precisao,
+            "recall": recall, "f1": f1}
 
 
-# ---------------------------------------------------------------------------
-# Warm start
-# ---------------------------------------------------------------------------
 def _carregar_gerador(caminho, codificador, decodificador, critico, dispositivo, log=print):
-    """Carrega pesos da Fase 2. Tolera o nome antigo das chaves (encoder/decoder)."""
+
     if not caminho or not os.path.exists(caminho):
         log(f"[warm start] {caminho!r} não encontrado -> gerador DO ZERO.\n"
               "             A Fase 3 é para ser construída SOBRE a Fase 2. Rode a Fase 2 antes,\n"
               "             ou aponte 'carregar_fase2' para o ckpt_best.pt no Drive.")
-        return False
+        return None
 
     estado = torch.load(caminho, map_location=dispositivo)
     cod = estado.get("codificador", estado.get("encoder"))
@@ -276,8 +180,13 @@ def _carregar_gerador(caminho, codificador, decodificador, critico, dispositivo,
     if cod is None or dec is None:
         raise KeyError(f"{caminho}: não achei os pesos do codificador/decodificador. "
                        f"Chaves presentes: {list(estado.keys())}")
-    codificador.load_state_dict(cod)
-    decodificador.load_state_dict(dec)
+    try:
+        codificador.load_state_dict(cod)
+        decodificador.load_state_dict(dec)
+    except RuntimeError as e:
+        raise RuntimeError(f"{caminho}: os pesos não cabem no gerador '{fase25._ATUAL}'. "
+                           "Confira cfg['arquitetura'] — checkpoint denso só carrega em gerador "
+                           "denso, residual só em residual.") from e
 
     if "critico" in estado:
         critico.load_state_dict(estado["critico"])
@@ -285,15 +194,11 @@ def _carregar_gerador(caminho, codificador, decodificador, critico, dispositivo,
     else:
         log(f"[warm start] gerador carregado de {caminho}; crítico DO ZERO "
               "(checkpoint não tinha os pesos do crítico)")
-    return True
+    return estado.get("val", {}).get("psnr")
 
 
 class _Log:
-    """Imprime na tela E grava em arquivo, com flush a cada linha.
-
-    O flush importa: se a sessão do Colab cair no meio do treino, o que já foi impresso
-    continua no disco. Sem ele, o buffer se perde junto com o runtime.
-    """
+ 
     def __init__(self, caminho):
         self.caminho = caminho
         self.arquivo = open(caminho, "a", encoding="utf-8")
@@ -308,13 +213,10 @@ class _Log:
 
 
 def _espelhar(cfg, origem, log=print):
-    """Copia o checkpoint para fora do ambiente efêmero (Drive), se configurado."""
     destino = cfg.get("espelho_ckpt")
     if not destino:
         return
-    # Se o espelho aponta para a própria pasta_saida (caso comum quando se roda direto no
-    # Drive montado), copiar é um no-op que só levanta SameFileError a cada época. Silencia
-    # sem mascarar falhas reais de escrita.
+  
     if os.path.abspath(destino) == os.path.abspath(cfg["pasta_saida"]):
         return
     try:
@@ -324,9 +226,6 @@ def _espelhar(cfg, origem, log=print):
         log(f"[espelho] falhou ao copiar para {destino}: {e}")
 
 
-# ---------------------------------------------------------------------------
-# Treino com DOIS adversários
-# ---------------------------------------------------------------------------
 def treinar():
     cfg = CONFIG
     torch.manual_seed(cfg["semente"]); random.seed(cfg["semente"])
@@ -335,13 +234,12 @@ def treinar():
     tm = base._tamanho_msg(cfg)
     bpp = cfg["profundidade_dados"] * (tm / cfg["tamanho_img"]) ** 2
 
-    # Tudo que for impresso daqui em diante também vai para treino.log.
     log = _Log(os.path.join(cfg["pasta_saida"], "treino.log"))
     log(f"===== Fase 3 iniciada em {datetime.now():%Y-%m-%d %H:%M:%S} =====")
     log("[cfg] " + "  ".join(f"{k}={cfg[k]}" for k in
         ("tamanho_img", "tamanho_msg", "tamanho_lote", "largura", "epocas",
          "lambda_imagem", "lambda_mensagem", "lambda_residuo", "lambda_adv",
-         "lambda_srnet", "n_critic", "n_srnet", "lr_srnet", "srnet_compacta")))
+         "lambda_srnet", "n_critic", "n_srnet", "lr_srnet", "srnet_compacta", "arquitetura")))
     log(f"[infra] dispositivo={dispositivo}  payload={bpp:.4g} bpp  "
           f"lambda_adv={cfg['lambda_adv']}  lambda_srnet={cfg['lambda_srnet']}  "
           f"n_critic={cfg['n_critic']}  n_srnet={cfg['n_srnet']}"
@@ -349,13 +247,24 @@ def treinar():
 
     loader_treino, loader_val = base.montar_loaders(cfg)
 
+    fase25.usar(cfg["arquitetura"])
     codificador = base.Codificador(cfg["canais"], cfg["profundidade_dados"], cfg["largura"]).to(dispositivo)
     decodificador = base.Decodificador(cfg["canais"], cfg["profundidade_dados"], cfg["largura"]).to(dispositivo)
     critico = fase2.Critico(cfg["canais"], cfg["largura_critico"]).to(dispositivo)
     srnet = SRNet(cfg["canais"], compacta=cfg["srnet_compacta"]).to(dispositivo)
 
-    _carregar_gerador(cfg.get("carregar_fase2"), codificador, decodificador, critico,
-                      dispositivo, log=log)
+    psnr_partida = _carregar_gerador(cfg.get("carregar_fase2"), codificador, decodificador,
+                                     critico, dispositivo, log=log)
+    if cfg["alvo_psnr"] is not None:
+        alvo_psnr = cfg["alvo_psnr"]
+        log(f"[alvo  ] critério (2): PSNR >= {alvo_psnr:.2f} dB (fixado em cfg)")
+    elif psnr_partida is not None:
+        alvo_psnr = round(psnr_partida - 1.0, 2)
+        log(f"[alvo  ] critério (2): PSNR >= {alvo_psnr:.2f} dB (partida {psnr_partida:.2f} - 1 dB)")
+    else:
+        alvo_psnr = 37.27
+        log(f"[alvo  ] checkpoint sem PSNR gravado -> critério (2) no padrão da Fase 2.5: "
+            f"PSNR >= {alvo_psnr:.2f} dB")
     n_par = sum(p.numel() for p in srnet.parameters())
     log(f"[srnet] iniciada DO ZERO — {n_par/1e6:.2f}M parâmetros")
 
@@ -363,24 +272,55 @@ def treinar():
                              lr=cfg["taxa_aprend"], betas=(cfg["beta1"], cfg["beta2"]))
     opt_c = torch.optim.Adam(critico.parameters(),
                              lr=cfg["lr_critico"], betas=(cfg["beta1"], cfg["beta2"]))
-    opt_s = torch.optim.Adam(srnet.parameters(), lr=cfg["lr_srnet"])   # betas padrão: é classificador, não crítico
+    opt_s = torch.optim.Adam(srnet.parameters(), lr=cfg["lr_srnet"])
 
+    melhor = {"score": float("-inf"), "epoca": 0, "acuracia_bits": 0.0, "psnr": 0.0,
+              "ssim": 0.0, "auc": float("nan")}
+    epoca_inicial = 1
+    ck_ret = cfg.get("retomar_de")
+    if ck_ret and os.path.exists(ck_ret):
+        est = torch.load(ck_ret, map_location=dispositivo)
+        codificador.load_state_dict(est["codificador"])
+        decodificador.load_state_dict(est["decodificador"])
+        critico.load_state_dict(est["critico"])
+        srnet.load_state_dict(est["srnet"])
+        if "opt_g" in est:
+            opt_g.load_state_dict(est["opt_g"])
+            opt_c.load_state_dict(est["opt_c"])
+            opt_s.load_state_dict(est["opt_s"])
+        else:
+            log("[retomada] o checkpoint não tem o estado dos otimizadores: o Adam recomeça "
+                "do zero e as primeiras épocas dão um solavanco.")
+        if est.get("melhor"):
+            melhor = est["melhor"]
+        if est.get("rng") is not None:
+            torch.set_rng_state(est["rng"].cpu())
+        epoca_inicial = int(est["epoca"]) + 1
+        log(f"[retomada] {ck_ret} — continuando da época {epoca_inicial} "
+            f"(melhor até aqui: época {melhor['epoca']}, PSNR {melhor['psnr']:.2f} dB)")
+        if epoca_inicial > cfg["epocas"]:
+            log(f"[retomada] o run já tinha {est['epoca']} épocas e cfg['epocas'] = "
+                f"{cfg['epocas']}. Suba 'epocas' para continuar.")
+    elif ck_ret:
+        log(f"[retomada] {ck_ret!r} não encontrado -> começando do zero.")
+
+    retomando = epoca_inicial > 1
     caminho_csv = os.path.join(cfg["pasta_saida"], "metricas_val.csv")
-    with open(caminho_csv, "w", newline="", encoding="utf-8") as f:
-        csv.writer(f).writerow(["epoca", "acuracia_bits", "psnr", "ssim", "auc_srnet", "w_dist"])
+    if not (retomando and os.path.exists(caminho_csv)):
+        with open(caminho_csv, "w", newline="", encoding="utf-8") as f:
+            csv.writer(f).writerow(["epoca", "acuracia_bits", "psnr", "ssim", "auc_srnet",
+                                    "auc_critico", "w_dist", "acuracia_det", "precisao",
+                                    "recall", "f1"])
 
-    # Diagnóstico do laço de treino. São estas colunas que dizem SE o treino está saudável —
-    # 'srnet_bce' travada em ~0,69 = detector não aprendeu; 'enganar' crescendo sem parar = o
-    # termo da SRNet está dominando a perda do gerador.
+   
     caminho_csv_treino = os.path.join(cfg["pasta_saida"], "metricas_treino.csv")
-    with open(caminho_csv_treino, "w", newline="", encoding="utf-8") as f:
-        csv.writer(f).writerow(["epoca", "perda_c", "w_dist", "adv", "srnet_bce", "enganar",
-                                "img_mse", "msg_bce", "acuracia_bits"])
-
-    melhor = {"score": -1.0, "epoca": 0, "acuracia_bits": 0.0, "psnr": 0.0, "ssim": 0.0, "auc": float("nan")}
+    if not (retomando and os.path.exists(caminho_csv_treino)):
+        with open(caminho_csv_treino, "w", newline="", encoding="utf-8") as f:
+            csv.writer(f).writerow(["epoca", "perda_c", "w_dist", "adv", "srnet_bce", "enganar",
+                                    "img_mse", "msg_bce", "acuracia_bits"])
 
     t_inicio = time.time()
-    for epoca in range(1, cfg["epocas"] + 1):
+    for epoca in range(epoca_inicial, cfg["epocas"] + 1):
         t_epoca = time.time()
         codificador.train(); decodificador.train(); critico.train(); srnet.train()
         ac = {"c": 0.0, "w": 0.0, "adv": 0.0, "s": 0.0, "eng": 0.0,
@@ -390,7 +330,6 @@ def treinar():
             portadora = portadora.to(dispositivo, non_blocking=True)
             b = portadora.size(0)
 
-            # ============ 1) CRÍTICO (realismo), n_critic vezes ============
             for _ in range(cfg["n_critic"]):
                 mensagem = base.mensagem_aleatoria(b, cfg)
                 with torch.no_grad():
@@ -403,12 +342,7 @@ def treinar():
 
             w_dist = (score_real - score_falsa).item()
 
-            # ============ 2) SRNet (detecção), n_srnet vezes ============
-            # Classificador binário puro: portadora = 0, estego = 1.
-            # Lote ÚNICO com portadora e estego juntas. A SRNet tem BatchNorm em todas as
-            # camadas; se as duas classes vierem em passagens separadas, cada lote é normalizado
-            # pelas próprias estatísticas e a rede pode separar pela composição do lote em vez
-            # do conteúdo — um viés que só aparece depois, em eval(). Concatenar elimina isso.
+         
             for _ in range(cfg["n_srnet"]):
                 mensagem = base.mensagem_aleatoria(b, cfg)
                 with torch.no_grad():
@@ -419,7 +353,6 @@ def treinar():
                 perda_s = F.binary_cross_entropy_with_logits(logits_s, alvos_s)
                 opt_s.zero_grad(); perda_s.backward(); opt_s.step()
 
-            # ============ 3) GERADOR, 1 vez, contra os DOIS adversários ============
             mensagem = base.mensagem_aleatoria(b, cfg)
             estego = codificador(portadora, base.espalhar_mensagem(mensagem, cfg))
             logits = base.agregar_logits(decodificador(estego), cfg)
@@ -427,10 +360,9 @@ def treinar():
             perda_img = F.mse_loss(estego, portadora)
             perda_msg = F.binary_cross_entropy_with_logits(logits, mensagem)
             perda_res = (estego - portadora).abs().mean()
-            perda_adv = -critico(estego).mean()          # quer SUBIR o score de realismo
+            perda_adv = -critico(estego).mean()
 
-            # Mesma composição de lote do passo da SRNet, para a BatchNorm ver as mesmas
-            # estatísticas; o gradiente só flui pela metade estego.
+  
             logits_g = srnet(torch.cat([portadora.detach(), estego], dim=0))
             logit_est_g = logits_g[b:]
             valor_alvo = 0.5 if cfg["alvo_srnet"] == "equilibrio" else 0.0
@@ -453,7 +385,8 @@ def treinar():
 
         n = ac["n"]
         seg = time.time() - t_epoca
-        restam = (cfg["epocas"] - epoca) * (time.time() - t_inicio) / epoca
+        feitas = epoca - epoca_inicial + 1
+        restam = (cfg["epocas"] - epoca) * (time.time() - t_inicio) / feitas
         log(f"[tempo ] época {epoca:3d}  {seg:6.1f}s  ({ac['n']//cfg['tamanho_lote']} passos de gerador)"
             f"  restam ~{restam/60:.0f} min")
         log(f"[treino] época {epoca:3d}  perda_c={ac['c']/n:+.3f}  W={ac['w']/n:+.3f}  "
@@ -461,40 +394,45 @@ def treinar():
               f"img_mse={ac['img']/n:.5f}  msg_bce={ac['msg']/n:.4f}  "
               f"acuracia_bits={ac['acc']/n:.4f}")
 
-        # --- validação: qualidade (Fase 0) + detecção (nova) ---
         val = base.avaliar(codificador, decodificador, loader_val, cfg)
         det = avaliar_srnet(codificador, srnet, loader_val, cfg)
         auc, auc_ef = det["auc"], max(det["auc"], 1.0 - det["auc"])
+        auc_c = fase2.avaliar_critico(codificador, critico, loader_val, cfg)
 
         c1 = val["acuracia_bits"] >= cfg["alvo_bitacc"]
-        c2 = val["psnr"] >= cfg["alvo_psnr"]
+        c2 = val["psnr"] >= alvo_psnr
         c3 = abs(auc - 0.5) <= 0.05
         marca = "".join(["1" if c1 else ".", "2" if c2 else ".", "3" if c3 else "."])
         log(f"[  val ] época {epoca:3d}  acuracia_bits={val['acuracia_bits']:.4f}  "
               f"psnr={val['psnr']:.2f}dB  ssim={val['ssim']:.4f}  "
-              f"auc_srnet={auc:.4f} (efetiva {auc_ef:.4f})  criterios[{marca}]")
+              f"auc_srnet={auc:.4f} (efetiva {auc_ef:.4f})  "
+              f"auc_critico={auc_c:.4f} (efetiva {max(auc_c, 1 - auc_c):.4f})  "
+              f"criterios[{marca}]")
+
+ 
+        log(f"[detect] época {epoca:3d}  acuracia={det['acuracia_deteccao']:.4f}  "
+            f"precisao={det['precisao']:.4f}  recall={det['recall']:.4f}  "
+            f"f1={det['f1']:.4f}")
 
         with open(caminho_csv, "a", newline="", encoding="utf-8") as f:
             csv.writer(f).writerow([epoca, f"{val['acuracia_bits']:.4f}", f"{val['psnr']:.2f}",
-                                    f"{val['ssim']:.4f}", f"{auc:.4f}", f"{ac['w']/n:.4f}"])
+                                    f"{val['ssim']:.4f}", f"{auc:.4f}", f"{auc_c:.4f}",
+                                    f"{ac['w']/n:.4f}", f"{det['acuracia_deteccao']:.4f}",
+                                    f"{det['precisao']:.4f}", f"{det['recall']:.4f}",
+                                    f"{det['f1']:.4f}"])
         with open(caminho_csv_treino, "a", newline="", encoding="utf-8") as f:
             csv.writer(f).writerow([epoca, f"{ac['c']/n:.4f}", f"{ac['w']/n:.4f}",
                                     f"{ac['adv']/n:.4f}", f"{ac['s']/n:.4f}", f"{ac['eng']/n:.4f}",
                                     f"{ac['img']/n:.6f}", f"{ac['msg']/n:.4f}", f"{ac['acc']/n:.4f}"])
 
-        # Espelha os registros TODA época — não só quando o checkpoint melhora. Se a sessão
-        # cair na época 47, o log e as métricas até ali já estão salvos fora do runtime.
+
         for reg in (caminho_csv, caminho_csv_treino, os.path.join(cfg["pasta_saida"], "treino.log")):
             _espelhar(cfg, reg, log)
 
-        # --- melhor checkpoint ---
-        # Critério DELIBERADAMENTE igual ao da Fase 2 (PSNR com acurácia como porteira), e não
-        # a AUC do laço. Selecionar pela AUC do detector que participou do treino é escolher o
-        # checkpoint que melhor engana ESTE detector — exatamente o viés que a Fase 4 existe
-        # para não cometer. A AUC fica no log como monitoramento, não como critério.
+      
         score = (val["psnr"] if c1 else val["acuracia_bits"] - 100.0)
         if score > melhor["score"]:
-            melhor = {"score": score, "epoca": epoca, "auc": auc,
+            melhor = {"score": score, "epoca": epoca, "auc": auc, "det": det,
                       **{k: val[k] for k in ("acuracia_bits", "psnr", "ssim")}}
             destino = os.path.join(cfg["pasta_saida"], "ckpt_best.pt")
             torch.save({"codificador": codificador.state_dict(),
@@ -508,15 +446,18 @@ def treinar():
         if epoca % cfg["salvar_cada"] == 0:
             base.salvar_amostras(codificador, loader_val, cfg, epoca)
             destino = os.path.join(cfg["pasta_saida"], "ckpt_last.pt")
-            torch.save({"codificador": codificador.state_dict(),
-                        "decodificador": decodificador.state_dict(),
-                        "critico": critico.state_dict(),
-                        "srnet": srnet.state_dict(),
-                        "epoca": epoca, "cfg": cfg},
-                       destino)
+            estado = {"codificador": codificador.state_dict(),
+                      "decodificador": decodificador.state_dict(),
+                      "critico": critico.state_dict(),
+                      "srnet": srnet.state_dict(),
+                      "epoca": epoca, "cfg": cfg,
+                      "melhor": melhor, "rng": torch.get_rng_state()}
+            if cfg.get("salvar_otimizadores", True):
+                estado.update(opt_g=opt_g.state_dict(), opt_c=opt_c.state_dict(),
+                              opt_s=opt_s.state_dict())
+            torch.save(estado, destino)
             _espelhar(cfg, destino, log)
 
-    # --- fechamento ---
     auc_ef = max(melhor["auc"], 1.0 - melhor["auc"])
     log(f"\n[fim] checkpoints, amostras e metricas_val.csv em: {cfg['pasta_saida']}")
     log(f"[melhor] época {melhor['epoca']}: acuracia_bits={melhor['acuracia_bits']:.4f}  "
@@ -524,9 +465,12 @@ def treinar():
     log("\nCRITÉRIOS DE SAÍDA DA FASE 3:")
     log(f"  (1) acuracia_bits >= 0.99          -> {melhor['acuracia_bits']:.4f}  "
           f"{'OK' if melhor['acuracia_bits'] >= 0.99 else 'FALHOU: baixe lambda_srnet'}")
-    log(f"  (2) PSNR >= {cfg['alvo_psnr']} dB (Fase 2 - 1dB) -> {melhor['psnr']:.2f}  "
-          f"{'OK' if melhor['psnr'] >= cfg['alvo_psnr'] else 'FALHOU: baixe lambda_srnet ou suba lambda_imagem'}")
-    if abs(melhor["auc"] - 0.5) <= 0.05:
+    log(f"  (2) PSNR >= {alvo_psnr:.2f} dB (partida - 1dB) -> {melhor['psnr']:.2f}  "
+          f"{'OK' if melhor['psnr'] >= alvo_psnr else 'FALHOU: baixe lambda_srnet ou suba lambda_imagem'}")
+    if melhor["acuracia_bits"] < cfg["alvo_bitacc"]:
+        veredito = ("SEM VALOR: a mensagem não é recuperada — o gerador engana o detector "
+                    "deixando de esconder. Baixe lambda_srnet")
+    elif abs(melhor["auc"] - 0.5) <= 0.05:
         veredito = "OK"
     elif melhor["auc"] > 0.5:
         veredito = "detector separando: suba lambda_srnet"
@@ -534,10 +478,19 @@ def treinar():
         veredito = ("gerador PASSOU DO PONTO (estego com score menor que portadora). "
                     "NÃO suba lambda_srnet — isso piora. Use alvo_srnet='equilibrio'")
     log(f"  (3) AUC do laço ~ 0.5              -> {melhor['auc']:.4f} (efetiva {auc_ef:.4f})  {veredito}")
+    d = melhor.get("det") or {}
+    if d:
+        log(f"      detector na melhor época: acuracia={d['acuracia_deteccao']:.4f}  "
+            f"precisao={d['precisao']:.4f}  recall={d['recall']:.4f}  f1={d['f1']:.4f}")
+        if d["recall"] > 0.95 and d["precisao"] < 0.55:
+            log("      ATENÇÃO: recall ~1 com precisão ~0,5 = o detector responde 'estego' "
+                "para tudo. Isso é detector que NAO CONVERGIU, nao seguranca.")
     log("\nATENÇÃO: o critério (3) mede o detector que participou do treino. Ele NÃO prova")
     log("segurança — pode significar que aquela SRNet não convergiu. A prova é a Fase 4,")
     log("que treina um esteganalisador independente e mede P_E. Ver ROADMAP.md.")
     log(f"\n[registros] treino.log, metricas_val.csv e metricas_treino.csv em {cfg['pasta_saida']}")
+    log(f"[retomada] se a sessão cair, rode de novo com "
+        f"cfg['retomar_de'] = '{os.path.join(cfg['pasta_saida'], 'ckpt_last.pt')}'")
     if not cfg.get("espelho_ckpt"):
         log("\nLEMBRETE: 'espelho_ckpt' está vazio. Se isto rodou no Colab, BAIXE AGORA o")
         log("ckpt_best.pt E os arquivos de registro — foi assim que os pesos das Fases 0 e 2")
@@ -547,7 +500,7 @@ def treinar():
         log(f"[espelho] registros e checkpoints copiados para {cfg['espelho_ckpt']}")
     log.fechar()
     return {"acuracia_bits": melhor["acuracia_bits"], "psnr": melhor["psnr"],
-            "ssim": melhor["ssim"], "auc": melhor["auc"]}
+            "ssim": melhor["ssim"], "auc": melhor["auc"], "alvo_psnr": alvo_psnr}
 
 
 if __name__ == "__main__":

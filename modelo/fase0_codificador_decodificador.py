@@ -15,7 +15,7 @@ from PIL import Image
 CONFIG = {
   
     "pasta_dados": None,
-    "canais": 3,               # 1 = grayscale (BOSSBase) | 3 = RGB (DIV2K, COCO)
+    "canais": 3,
     "tamanho_img": 128,        
     "fracao_val": 0.05,       
     "max_imagens": None,      
@@ -35,7 +35,6 @@ CONFIG = {
     "usar_amp": True,          
     "alvo_bitacc": 0.99,       
 
-    # --- infra ---
     "num_trabalhadores": 2,   
     "semente": 42,             
     "pasta_saida": "runs/phase0",
@@ -51,7 +50,7 @@ COLAB_GPU = dict(
     tamanho_lote=32,
     epocas=120,
     largura=64,
-    max_imagens=None,        # dataset inteiro
+    max_imagens=None,
     num_trabalhadores=4,
     lambda_imagem=2.0,
     lambda_residuo=0.05,
@@ -65,15 +64,13 @@ class DatasetImagens(Dataset):
     def __init__(self, caminhos, canais, tamanho_img, treino=True):
         self.caminhos = caminhos
         self.canais = canais
-        self.modo = "L" if canais == 1 else "RGB"   # "L" = grayscale
-        # Treino: recorte aleatório + espelhamento (aumenta os dados e desacopla do tamanho original).
-        # Se a imagem for menor que o recorte, faz resize antes.
+        self.modo = "L" if canais == 1 else "RGB"
         if treino:
             self.transformacao = transforms.Compose([
-                transforms.Resize(tamanho_img),                       # garante lado >= tamanho_img
+                transforms.Resize(tamanho_img),
                 transforms.RandomCrop(tamanho_img, pad_if_needed=True),
                 transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),                                # pixels em [0, 1]
+                transforms.ToTensor(),
             ])
         else:
             self.transformacao = transforms.Compose([
@@ -98,7 +95,6 @@ class DatasetSintetico(Dataset):
         return self.n
 
     def __getitem__(self, indice):
-        # imagem suave (não ruído puro) para o MSE ter o que aprender
         base = torch.rand(self.canais, 1, 1)
         gradiente = torch.linspace(0, 1, self.tamanho_img).view(1, 1, -1)
         return (base + 0.3 * gradiente).clamp(0, 1).expand(
@@ -157,7 +153,7 @@ class Codificador(nn.Module):
         b = self.bloco2(torch.cat([a, mensagem], dim=1))
         c = self.bloco3(torch.cat([a, b, mensagem], dim=1))
         residuo = self.para_residuo(torch.cat([a, b, c, mensagem], dim=1))
-        estego = (portadora + residuo).clamp(0.0, 1.0)   # soma o resíduo e mantém em [0,1]
+        estego = (portadora + residuo).clamp(0.0, 1.0)
         return estego
 
 
@@ -250,7 +246,7 @@ def treinar():
     usar_amp = cfg["usar_amp"] and dispositivo == "cuda"
     escalador = torch.cuda.amp.GradScaler(enabled=usar_amp)
 
-    melhor = {"score": -1.0, "epoca": 0, "acuracia_bits": 0.0, "psnr": 0.0, "ssim": 0.0}
+    melhor = {"score": float("-inf"), "epoca": 0, "acuracia_bits": 0.0, "psnr": 0.0, "ssim": 0.0}
 
     for epoca in range(1, cfg["epocas"] + 1):
         codificador.train(); decodificador.train()
@@ -265,9 +261,9 @@ def treinar():
                 estego = codificador(portadora, mensagem_espalhada)
                 logits = agregar_logits(decodificador(estego), cfg)
 
-                perda_imagem = F.mse_loss(estego, portadora)                              # qualidade visual
-                perda_mensagem = F.binary_cross_entropy_with_logits(logits, mensagem)     # recuperação
-                perda_residuo = (estego - portadora).abs().mean()                         # perturbação pequena
+                perda_imagem = F.mse_loss(estego, portadora)
+                perda_mensagem = F.binary_cross_entropy_with_logits(logits, mensagem)
+                perda_residuo = (estego - portadora).abs().mean()
                 perda = (cfg["lambda_imagem"] * perda_imagem
                          + cfg["lambda_mensagem"] * perda_mensagem
                          + cfg["lambda_residuo"] * perda_residuo)
@@ -348,10 +344,9 @@ def salvar_amostras(codificador, loader, cfg, epoca):
     portadora = next(iter(loader)).to(cfg["dispositivo"])[:8]
     mensagem = mensagem_aleatoria(portadora.size(0), cfg)
     estego = codificador(portadora, espalhar_mensagem(mensagem, cfg))
-    # amplia o resíduo p/ inspeção visual do que foi alterado
     residuo = (estego - portadora).abs()
     residuo = residuo / (residuo.amax() + 1e-8)
-    grade = torch.cat([portadora, estego, residuo], dim=0)   # linha1=portadora, 2=estego, 3=resíduo
+    grade = torch.cat([portadora, estego, residuo], dim=0)
     caminho = os.path.join(cfg["pasta_saida"], f"samples_epoch{epoca:03d}.png")
     save_image(grade, caminho, nrow=8)
 
