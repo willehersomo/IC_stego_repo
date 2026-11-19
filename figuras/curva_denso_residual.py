@@ -25,7 +25,6 @@ PSNR_ALVO = 35.0
 
 
 def ler_metricas(caminho):
-    """Lê um metricas_val.csv e devolve (épocas, psnr, ssim)."""
     with open(caminho, encoding="utf-8") as arquivo:
         linhas = list(csv.DictReader(arquivo))
     return ([int(l["epoca"]) for l in linhas],
@@ -91,7 +90,7 @@ def desenhar_psnr(eixo, series, corte, fim):
     eixo.legend(loc="lower left", bbox_to_anchor=(0.02, -0.02), fontsize=8,
                 frameon=False, labelcolor=TINTA, handlelength=1.6, ncol=2,
                 columnspacing=1.2)
-    eixo.set_title("BOSSBase · 0,0625 bpp — gerador denso × residual, Fases 0 e 2",
+    eixo.set_title("BOSSBase · 0,0625 bpp - gerador denso × residual, Fases 0 e 2",
                    color=TINTA, fontsize=10.5, fontweight="bold", loc="left", pad=8)
 
 
@@ -99,7 +98,7 @@ def desenhar_ssim(eixo, series, fim):
     for x, ssim, cor in series:
         eixo.plot(x, suavizar(ssim), color=cor, linewidth=2.0, zorder=3)
     eixo.set_ylabel("SSIM", color=TINTA2, fontsize=9)
-    eixo.set_xlabel("época  (Fase 0: 1–120  ·  Fase 2: 121–180)",
+    eixo.set_xlabel("época  (Fase 0: 1-120  ·  Fase 2: 121-180)",
                     color=TINTA2, fontsize=9)
     eixo.set_ylim(0.25, 1.0)
 

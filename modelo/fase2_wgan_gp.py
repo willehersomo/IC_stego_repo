@@ -1,4 +1,3 @@
-
 import os
 import math
 import random
@@ -78,7 +77,6 @@ def penalidade_gradiente(critico, reais, falsas, dispositivo):
 
 
 def auc_binaria(scores, rotulos):
-    """AUC pela estatística de Mann-Whitney (equivale à área sob a curva ROC)."""
     scores = scores.detach().float().flatten()
     rotulos = rotulos.detach().float().flatten()
     n_pos = int(rotulos.sum().item())
@@ -95,7 +93,6 @@ def auc_binaria(scores, rotulos):
 
 @torch.no_grad()
 def avaliar_critico(codificador, critico, loader, cfg):
-    """Separabilidade portadora x estego PELO SCORE DO CRÍTICO, em AUC."""
     codificador.eval(); critico.eval()
     scores, rotulos = [], []
     for portadora in loader:

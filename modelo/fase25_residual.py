@@ -1,4 +1,3 @@
-
 import os
 import shutil
 import sys
@@ -66,7 +65,6 @@ _EXTRAS = {}
 
 
 def registrar(nome, fabrica_cod, fabrica_dec=None):
-    """Registra uma arquitetura extra para `usar(nome)`."""
     _EXTRAS[nome] = (fabrica_cod, fabrica_dec)
     return nome
 
@@ -233,10 +231,10 @@ def comparar(csv_denso, csv_residual, alvo_psnr=ALVO_PSNR_FASE2, rotulo="Fase 2"
  
     d, r = _ler_csv(csv_denso), _ler_csv(csv_residual)
     if not r:
-        print(f"[comparar] {csv_residual} não encontrado — rode o treino antes.")
+        print(f"[comparar] {csv_residual} não encontrado - rode o treino antes.")
         return None
     if not d:
-        print(f"[comparar] {csv_denso} não encontrado — sem linha de base para comparar.")
+        print(f"[comparar] {csv_denso} não encontrado - sem linha de base para comparar.")
         return None
 
     n = min(len(d), len(r))

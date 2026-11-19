@@ -104,7 +104,6 @@ class _Tipo4(nn.Module):
 
 
 class SRNet(nn.Module):
-    """Imagem -> 1 logit. Alto = "tem mensagem escondida" (estego)."""
     def __init__(self, canais, compacta=False):
         super().__init__()
         e = 0.5 if compacta else 1.0
@@ -185,7 +184,7 @@ def _carregar_gerador(caminho, codificador, decodificador, critico, dispositivo,
         decodificador.load_state_dict(dec)
     except RuntimeError as e:
         raise RuntimeError(f"{caminho}: os pesos não cabem no gerador '{fase25._ATUAL}'. "
-                           "Confira cfg['arquitetura'] — checkpoint denso só carrega em gerador "
+                           "Confira cfg['arquitetura'] - checkpoint denso só carrega em gerador "
                            "denso, residual só em residual.") from e
 
     if "critico" in estado:
@@ -266,7 +265,7 @@ def treinar():
         log(f"[alvo  ] checkpoint sem PSNR gravado -> critério (2) no padrão da Fase 2.5: "
             f"PSNR >= {alvo_psnr:.2f} dB")
     n_par = sum(p.numel() for p in srnet.parameters())
-    log(f"[srnet] iniciada DO ZERO — {n_par/1e6:.2f}M parâmetros")
+    log(f"[srnet] iniciada DO ZERO - {n_par/1e6:.2f}M parâmetros")
 
     opt_g = torch.optim.Adam(list(codificador.parameters()) + list(decodificador.parameters()),
                              lr=cfg["taxa_aprend"], betas=(cfg["beta1"], cfg["beta2"]))
@@ -296,7 +295,7 @@ def treinar():
         if est.get("rng") is not None:
             torch.set_rng_state(est["rng"].cpu())
         epoca_inicial = int(est["epoca"]) + 1
-        log(f"[retomada] {ck_ret} — continuando da época {epoca_inicial} "
+        log(f"[retomada] {ck_ret} - continuando da época {epoca_inicial} "
             f"(melhor até aqui: época {melhor['epoca']}, PSNR {melhor['psnr']:.2f} dB)")
         if epoca_inicial > cfg["epocas"]:
             log(f"[retomada] o run já tinha {est['epoca']} épocas e cfg['epocas'] = "
@@ -468,7 +467,7 @@ def treinar():
     log(f"  (2) PSNR >= {alvo_psnr:.2f} dB (partida - 1dB) -> {melhor['psnr']:.2f}  "
           f"{'OK' if melhor['psnr'] >= alvo_psnr else 'FALHOU: baixe lambda_srnet ou suba lambda_imagem'}")
     if melhor["acuracia_bits"] < cfg["alvo_bitacc"]:
-        veredito = ("SEM VALOR: a mensagem não é recuperada — o gerador engana o detector "
+        veredito = ("SEM VALOR: a mensagem não é recuperada - o gerador engana o detector "
                     "deixando de esconder. Baixe lambda_srnet")
     elif abs(melhor["auc"] - 0.5) <= 0.05:
         veredito = "OK"
@@ -476,7 +475,7 @@ def treinar():
         veredito = "detector separando: suba lambda_srnet"
     else:
         veredito = ("gerador PASSOU DO PONTO (estego com score menor que portadora). "
-                    "NÃO suba lambda_srnet — isso piora. Use alvo_srnet='equilibrio'")
+                    "NÃO suba lambda_srnet - isso piora. Use alvo_srnet='equilibrio'")
     log(f"  (3) AUC do laço ~ 0.5              -> {melhor['auc']:.4f} (efetiva {auc_ef:.4f})  {veredito}")
     d = melhor.get("det") or {}
     if d:
@@ -486,14 +485,14 @@ def treinar():
             log("      ATENÇÃO: recall ~1 com precisão ~0,5 = o detector responde 'estego' "
                 "para tudo. Isso é detector que NAO CONVERGIU, nao seguranca.")
     log("\nATENÇÃO: o critério (3) mede o detector que participou do treino. Ele NÃO prova")
-    log("segurança — pode significar que aquela SRNet não convergiu. A prova é a Fase 4,")
+    log("segurança - pode significar que aquela SRNet não convergiu. A prova é a Fase 4,")
     log("que treina um esteganalisador independente e mede P_E. Ver ROADMAP.md.")
     log(f"\n[registros] treino.log, metricas_val.csv e metricas_treino.csv em {cfg['pasta_saida']}")
     log(f"[retomada] se a sessão cair, rode de novo com "
         f"cfg['retomar_de'] = '{os.path.join(cfg['pasta_saida'], 'ckpt_last.pt')}'")
     if not cfg.get("espelho_ckpt"):
         log("\nLEMBRETE: 'espelho_ckpt' está vazio. Se isto rodou no Colab, BAIXE AGORA o")
-        log("ckpt_best.pt E os arquivos de registro — foi assim que os pesos das Fases 0 e 2")
+        log("ckpt_best.pt E os arquivos de registro - foi assim que os pesos das Fases 0 e 2")
         log("se perderam, e a saída da célula do notebook some junto com o runtime.")
     else:
         _espelhar(cfg, os.path.join(cfg["pasta_saida"], "treino.log"), log)

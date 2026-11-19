@@ -1,4 +1,3 @@
-"""Fase 4.0 — régua externa: P_E com esteganalisadores treinados do zero (09/11/2026)."""
 import csv
 import math
 import os
@@ -61,7 +60,6 @@ def quarteto(scores, rotulos):
 
 @torch.no_grad()
 def metricas_imagem(capas, estego, lote=100):
-    """PSNR (da média dos MSE), SSIM (o da Fase 0, média por imagem), MSE, taxa e RMS, em uint8."""
     x, y = capas.float(), estego.float()
     d = y - x
     ss = sum(base.ssim(y[i:i + lote] / 255.0, x[i:i + lote] / 255.0, x.shape[1]) * len(x[i:i + lote])
@@ -75,7 +73,6 @@ def metricas_imagem(capas, estego, lote=100):
 
 
 def dividir(cfg):
-    """O split da Fase 3.0: (caminhos, treino_det, val_det, teste)."""
     c = dict(f30.CONFIG_SPLIT, pasta_dados=cfg["pasta_dados"], semente_split=cfg["semente_split"],
              fracao_val=cfg["fracao_val"], n_val_detector=cfg["n_val_detector"],
              max_imagens=cfg["max_imagens"])
@@ -84,7 +81,6 @@ def dividir(cfg):
 
 @torch.no_grad()
 def carregar_capas(caminhos, cfg, log=print):
-    """Portadoras uint8 (N, C, H, W) com a transformação de VALIDAÇÃO (a do teste do gerador)."""
     cache = os.path.join(cfg["pasta_saida"], "corpus",
                          f"capas_{cfg['canais']}x{cfg['tamanho_img']}_{len(caminhos)}.pt")
     if os.path.exists(cache):
@@ -99,7 +95,6 @@ def carregar_capas(caminhos, cfg, log=print):
 
 
 def _lsbm(capas, bpp, semente=7):
-    """LSB matching sem custo (só para o currículo da SRNet): `bpp` bits em posições sorteadas."""
     g = torch.Generator().manual_seed(semente)
     n, amostras = capas.shape[0], capas[0].numel()
     usados = int(round(min(bpp, 1.0) * amostras))
@@ -116,7 +111,6 @@ def _lsbm(capas, bpp, semente=7):
 
 @torch.no_grad()
 def gerar_estego(metodo, capas, idx_te, bpp, cfg, log=print):
-    """metodo = {"nome", "tipo": "hill" | "unif" | "custo", "ckpt"}. Devolve (estego uint8, info)."""
     cache = os.path.join(cfg["pasta_saida"], "corpus",
                          f"estego_{metodo['nome']}_{bpp:g}_{cfg['canais']}x{cfg['tamanho_img']}_{len(capas)}.pt")
     if os.path.exists(cache):
@@ -150,7 +144,6 @@ def gerar_estego(metodo, capas, idx_te, bpp, cfg, log=print):
 
 
 class _EffNet(nn.Module):
-    """EfficientNet-B0 do timm, ImageNet, 1 logit."""
 
     def __init__(self, canais=1, pretreinada=True):
         super().__init__()
@@ -179,7 +172,6 @@ def construir_detector(nome, canais=1):
 
 
 def _aumentar(x):
-    """Rotações de 90° e espelhamento: não mudam a estatística do ruído."""
     k = random.randrange(4)
     if k:
         x = torch.rot90(x, k, dims=(2, 3))
@@ -192,7 +184,6 @@ def _semear(semente):
 
 @torch.no_grad()
 def _pontuar(rede, capas, estego, idx, cfg):
-    """Notas no formato [capas de idx..., estegos de idx...]; rótulos 0 e 1."""
     dev, amp = cfg["dispositivo"], cfg["usar_amp"] and cfg["dispositivo"] == "cuda"
     rede.eval()
     lote = f30._lote_por_tamanho(128, capas)
@@ -208,7 +199,6 @@ def _pontuar(rede, capas, estego, idx, cfg):
 
 def treinar_detector(nome, capas, estego, idx_tr, idx_va, idx_te, cfg, semente, log=print,
                      inicial=None, epocas=None, rotulo=None):
-    """Treina na treino_det, escolhe a época pela val_det e (se idx_te) mede no teste."""
     _semear(semente)
     dev, amp = cfg["dispositivo"], cfg["usar_amp"] and cfg["dispositivo"] == "cuda"
     epocas = epocas or cfg["epocas"]
@@ -262,7 +252,6 @@ def treinar_detector(nome, capas, estego, idx_tr, idx_va, idx_te, cfg, semente, 
 
 
 def _espelhar_arquivo(local, cfg):
-    """Copia um arquivo da pasta de saída para o mesmo caminho relativo no espelho."""
     if not cfg.get("espelho"):
         return
     destino = os.path.join(cfg["espelho"], os.path.relpath(local, cfg["pasta_saida"]))
@@ -278,7 +267,6 @@ def _no_espelho_ou_local(rel, cfg):
 
 
 def preparar_curriculo(nome, capas, idx_tr, idx_va, cfg, semente, log=print):
-    """Pré-treino da SRNet em LSBM de carga decrescente; um por semente (sementes independentes)."""
     cargas = cfg["curriculo"][nome]
     rel = os.path.join("curriculo", f"{nome}_{'-'.join(f'{c:g}' for c in cargas)}_"
                        f"{cfg['epocas_curriculo']}ep_s{semente}_{len(capas)}.pt")
@@ -326,7 +314,6 @@ def nome_notas(metodo, bpp, det, semente):
 
 def rodar(metodos, cargas=(0.4, 0.2), detectores=("srnet_cur", "effnet"), sementes=(1234, 1235),
           cfg=None):
-    """Mede todas as combinações; retomável pela tabela do espelho."""
     cfg = dict(CONFIG, **(cfg or {}))
     os.makedirs(cfg["pasta_saida"], exist_ok=True)
     caminho_log = os.path.join(cfg["pasta_saida"], "fase40.log")
@@ -385,7 +372,7 @@ def rodar(metodos, cargas=(0.4, 0.2), detectores=("srnet_cur", "effnet"), sement
                     if razao > cfg["razao_taxa_max"]:
                         log(f"[ALERTA] {m['nome']} @ {bpp:g} altera {razao:.3f}× o HILL: confira antes de ler o P_E")
                     log("=" * 78)
-                    log(f"FASE 4.0 — {m['nome']} @ {bpp:g} bpp × {det} (semente {semente})")
+                    log(f"FASE 4.0 - {m['nome']} @ {bpp:g} bpp × {det} (semente {semente})")
                     log("=" * 78)
                     r = treinar_detector(det, capas, estego, idx_tr, idx_va, idx_te, cfg, semente, log,
                                          inicial=inicial, rotulo=f"{m['nome']}@{bpp:g} {det} s{semente}")
@@ -422,7 +409,6 @@ def rodar(metodos, cargas=(0.4, 0.2), detectores=("srnet_cur", "effnet"), sement
 
 
 def _bootstrap_delta(notas_a, notas_h, n_teste, reamostras, rng, grupos=None):
-    """ΔP_E (a − b) em cada reamostra pareada das imagens de teste."""
     y = np.r_[np.zeros(n_teste), np.ones(n_teste)]
     membros = None
     if grupos is not None:
@@ -441,7 +427,6 @@ def _bootstrap_delta(notas_a, notas_h, n_teste, reamostras, rng, grupos=None):
 
 
 def grupos_por_cena(cfg):
-    """Cena de cada imagem de teste, na ordem das notas (só nos recortes do DIV2K; no BOSS, None)."""
     cfg = dict(CONFIG, **(cfg or {}))
     sep = f30.CONFIG_SPLIT.get("separador_cena")
     caminhos, _, _, idx_te = dividir(cfg)
@@ -452,7 +437,6 @@ def grupos_por_cena(cfg):
 
 
 def _ic_pareado(espelho, met_a, met_b, bpp, det, sementes, reamostras, rng, grupos):
-    """IC 95% de P_E(met_a) − P_E(met_b), pareado por semente e por imagem (média sobre as sementes)."""
     boots = []
     for s in sementes:
         na = _carregar_notas(espelho, met_a, bpp, det, s)
@@ -466,8 +450,6 @@ def _ic_pareado(espelho, met_a, met_b, bpp, det, sementes, reamostras, rng, grup
 
 
 def resumo(espelho, reamostras=1000, semente=0, cenas=None, comparar=(("hibrido", "so_bce"),)):
-    """Tabela por (conjunto, tamanho, carga, detector, método): P_E médio ± dp entre sementes, ΔP_E vs HILL
-    e o IC 95% do ΔP_E (bootstrap pareado nas imagens, média sobre as sementes)."""
     linhas = _ler_tabela(os.path.join(espelho, "resultados_fase40.csv"))
     if not linhas:
         print("tabela vazia"); return []
@@ -477,7 +459,7 @@ def resumo(espelho, reamostras=1000, semente=0, cenas=None, comparar=(("hibrido"
         grupos.setdefault((l["conjunto"], int(l["tamanho"]), l["bpp"], l["detector"], l["metodo"]), []).append(l)
     saida = []
     print("=" * 104)
-    print("FASE 4.0 — P_E no teste (0,5 = indetectável). ΔP_E > 0 = mais seguro que o HILL")
+    print("FASE 4.0 - P_E no teste (0,5 = indetectável). ΔP_E > 0 = mais seguro que o HILL")
     print("=" * 104)
     print(f"{'conj':>5}{'tam':>5}{'bpp':>6}{'detector':>11}{'método':>10}{'n':>3}{'P_E':>9}{'dp':>7}"
           f"{'ΔP_E':>9}{'IC 95%':>18}{'PSNR':>8}{'SSIM':>9}{'taxa':>8}")

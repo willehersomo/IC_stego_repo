@@ -1,4 +1,3 @@
-"""Fase 3.0 — custo aprendido com crítico WGAN-GP, só o laço (recomeço de 05/11/2026)."""
 import contextlib
 import copy
 import json
@@ -69,8 +68,6 @@ def dividir(cfg):
 
 
 def _dividir_por_cena(caminhos, sep, cfg):
-    """Mesmo esquema do `dividir`, mas sorteando CENAS: todos os recortes de uma foto ficam no mesmo lado
-    (treino_det, val_det ou teste)."""
     grupos = {}
     for c in caminhos:
         grupos.setdefault(os.path.basename(c).split(sep)[0], []).append(c)
@@ -101,7 +98,6 @@ def _pad_simetrico(x, p):
 
 
 def custo_hill(x, dtype=torch.float64):
-    """Custos (ρ+, ρ−) do HILL. Em cor, cada canal é tratado como uma imagem cinza."""
     forma = x.shape
     x = x.reshape(-1, 1, *forma[-2:]).to(dtype)
     kb = torch.tensor([[-1., 2., -1.], [2., -4., 2.], [-1., 2., -1.]], dtype=x.dtype,
@@ -128,7 +124,6 @@ def _entropia_bits(pp, pm):
 
 
 def achar_lambda(rp, rm, bits, iteracoes=60):
-    """Bissecção em ln λ: o λ de cada imagem que faz a entropia ternária dar `bits`."""
     n = rp.shape[0]
     forma = (n,) + (1,) * (rp.dim() - 1)
     lo = torch.full(forma, -40.0, dtype=rp.dtype, device=rp.device)
@@ -151,7 +146,6 @@ def simular_embutimento(x, rp, rm, bits, gerador_rng, iteracoes=60):
 
 
 def _lote_por_tamanho(lote, capas):
-    """`lote` vale para 1×128×128; em cor ou a 256 ele encolhe na mesma proporção."""
     return max(1, int(lote * 128 * 128 / capas[0].numel()))
 
 
@@ -171,7 +165,6 @@ def nome_pasta(passo):
 
 
 def recortar(origem, destino, canais, tamanho, por_imagem, semente=42, log=print):
-    """Gera os recortes de todas as fotos de `origem` em `destino`."""
     fotos = sorted(glob.glob(os.path.join(origem, "*.png")) + glob.glob(os.path.join(origem, "*.jpg")))
     if not fotos:
         raise FileNotFoundError(f"nenhuma foto em {origem}")
@@ -211,7 +204,6 @@ def recortar(origem, destino, canais, tamanho, por_imagem, semente=42, log=print
 
 
 def preparar(passo, pasta_fontes, pasta_destino, log=print):
-    """`pasta_fontes` tem DIV2K_train_HR/ e/ou val2017/. Devolve (pasta dos recortes, config)."""
     p = PASSOS[passo]
     origem = os.path.join(pasta_fontes, "DIV2K_train_HR" if p["fonte"] == "div2k" else "val2017")
     destino = os.path.join(pasta_destino, nome_pasta(passo))
@@ -225,14 +217,12 @@ P_MIN = 1e-6
 
 
 def entropia_ternaria(p):
-    """Bits por imagem que um embutimento ±1 com probabilidade total p carrega. (B,1,H,W)->(B,)"""
     p = p.clamp(P_MIN, 0.5 - P_MIN)
     h = -p * torch.log2(p / 2) - (1 - p) * torch.log2(1 - p)
     return h.flatten(1).sum(1)
 
 
 def p_uniforme(bpp):
-    """p constante que carrega `bpp` bits por pixel. Usado para iniciar o gerador já na carga."""
     lo, hi = P_MIN, 0.5 - P_MIN
     for _ in range(60):
         meio = (lo + hi) / 2
@@ -248,7 +238,6 @@ P_HILL_DTYPE = torch.float32
 
 @contextlib.contextmanager
 def p_hill_em(dtype):
-    """Troca o dtype do p_hill dentro do bloco (o gerador lê a variável a cada chamada)."""
     global P_HILL_DTYPE
     antigo, P_HILL_DTYPE = P_HILL_DTYPE, dtype
     try:
@@ -259,8 +248,6 @@ def p_hill_em(dtype):
 
 @torch.no_grad()
 def p_hill(x255, bpp):
-    """Mapa p do HILL na carga `bpp`: o mesmo λ que o simulador ótimo acha para o HILL, então p_hill tem
-    exatamente `bpp` bits por amostra."""
     rp, rm = custo_hill(x255, P_HILL_DTYPE)
     pp, pm = achar_lambda(rp, rm, bpp * x255[0].numel())
     return (pp + pm).float().clamp(P_MIN, 0.5 - P_MIN)
@@ -268,7 +255,6 @@ def p_hill(x255, bpp):
 
 @torch.no_grad()
 def diferenca_p_hill(x255, bpp):
-    """Maior |p_hill(float32) − p_hill(float64)| no lote, no dispositivo do lote."""
     with p_hill_em(torch.float32):
         a = p_hill(x255, bpp)
     with p_hill_em(torch.float64):
@@ -277,23 +263,19 @@ def diferenca_p_hill(x255, bpp):
 
 
 def double_tanh(p, n, lam):
-    """Simulador de embutimento diferenciável (UT-6HPF-GAN)."""
     return -0.5 * torch.tanh(lam * (p - 2 * n)) + 0.5 * torch.tanh(lam * (p - 2 * (1 - n)))
 
 
 def molhar(p, x255):
-    """Pixels saturados (0 ou 255) não mudam — os 'molhados' do HILL."""
     return torch.where((x255 <= 0) | (x255 >= 255), torch.full_like(p, P_MIN), p)
 
 
 def custo(p):
-    """Probabilidade -> custo ρ, o inverso de p = 2e^{−ρ} / (1 + 2e^{−ρ}) com λ = 1."""
     p = p.double().clamp(P_MIN, 0.5 - P_MIN)
     return torch.log(2.0 / p - 2.0).clamp_max(CUSTO_MOLHADO)
 
 
 class GeradorCusto(nn.Module):
-    """Portadora -> mapa p."""
 
     def __init__(self, canais=1, largura=64, blocos=6, p_inicial=0.05, base_p="uniforme", bpp=0.4):
         super().__init__()
@@ -324,7 +306,6 @@ NORMAS = ("batch", "instancia", "afim", "espectral")
 
 
 class _Afim(nn.Module):
-    """Afim por canal sem estatística."""
 
     def __init__(self, canais):
         super().__init__()
@@ -352,7 +333,6 @@ def _camada_norma(norma, canais):
 
 
 def _trocar_batchnorm(modulo, norma):
-    """Troca cada BatchNorm2d da rede pela normalização pedida (a SRNet da Fase 3 vem com BN)."""
     for nome, filho in modulo.named_children():
         if isinstance(filho, nn.BatchNorm2d):
             setattr(modulo, nome, _camada_norma(norma, filho.num_features))
@@ -367,7 +347,6 @@ def _aplicar_espectral(rede):
 
 
 def norma_efetiva(cfg):
-    """A normalização que `construir_discriminador` usa com esta configuração."""
     if cfg.get("norma_critico"):
         return cfg["norma_critico"]
     if cfg.get("discriminador", "xunet") == "srnet":
@@ -376,7 +355,6 @@ def norma_efetiva(cfg):
 
 
 def _hpf6():
-    """6 passa-altas fixos 5×5: KV, KB e as diferenças de 1ª e 2ª ordem nas duas direções."""
     kv = torch.tensor([[-1, 2, -2, 2, -1], [2, -6, 8, -6, 2], [-2, 8, -12, 8, -2],
                        [2, -6, 8, -6, 2], [-1, 2, -2, 2, -1]], dtype=torch.float32) / 12
     filtros = [kv]
@@ -389,7 +367,6 @@ def _hpf6():
 
 
 class XuNet6HPF(nn.Module):
-    """XuNet (Xu, Wu e Shi, 2016) com o banco de 6 passa-altas fixos."""
 
     def __init__(self, canais=1, norma="batch"):
         super().__init__()
@@ -416,7 +393,6 @@ class XuNet6HPF(nn.Module):
 
 
 class _SRNet255(nn.Module):
-    """A SRNet da Fase 3, recebendo a mesma escala 0–255 que a XuNet."""
 
     def __init__(self, canais=1, norma="batch"):
         super().__init__()
@@ -444,13 +420,11 @@ def construir_discriminador(cfg):
 
 
 def estego_hill(x255, bpp, rng):
-    """Estego HILL na carga `bpp` com o simulador ótimo, em float64."""
     rp, rm = custo_hill(x255)
     return (x255 + simular_embutimento(x255, rp, rm, bpp * x255[0].numel(), rng)).clamp(0, 255)
 
 
 def converter_bn_para_afim(modulo):
-    """Troca, no lugar, cada BatchNorm2d por uma _Afim com a mesma transformação de avaliação."""
     for nome, filho in modulo.named_children():
         if isinstance(filho, nn.BatchNorm2d):
             escala = filho.weight.detach() / torch.sqrt(filho.running_var + filho.eps)
@@ -467,7 +441,6 @@ def converter_bn_para_afim(modulo):
 
 @torch.no_grad()
 def auc_hill(rede, loader, cfg, bpp=None, semente=4321):
-    """AUC da rede separando portadoras de estegos HILL (val)."""
     dev, bpp = cfg["dispositivo"], bpp or cfg["bpp"]
     rng = torch.Generator().manual_seed(semente)
     rede.eval()
@@ -481,8 +454,6 @@ def auc_hill(rede, loader, cfg, bpp=None, semente=4321):
 
 
 def pretreinar_critico_bce(cfg, saida, epocas=15, lr=1e-4, log=print):
-    """SRNet + BatchNorm + BCE, portadora × HILL na carga de treino, `epocas` épocas; guarda em `saida` o
-    state_dict JÁ CONVERTIDO (BN → afim), pronto para `critico_inicial`."""
     cfg = dict(CONFIG, **cfg)
     dev = cfg["dispositivo"]
     torch.manual_seed(cfg["semente"])
@@ -520,7 +491,6 @@ def pretreinar_critico_bce(cfg, saida, epocas=15, lr=1e-4, log=print):
 
 
 def estego_unif(x255, bpp, rng):
-    """±1 uniforme na carga `bpp` (o controle positivo), com o simulador ótimo."""
     um = torch.ones(x255.shape, dtype=torch.float64, device=x255.device)
     rp = torch.where(x255 >= 255, CUSTO_MOLHADO, um)
     rm = torch.where(x255 <= 0, CUSTO_MOLHADO, um)
@@ -529,7 +499,6 @@ def estego_unif(x255, bpp, rng):
 
 @torch.no_grad()
 def auc_ref(rede, loader, cfg, bpp, tipo="hill", semente=4321):
-    """AUC da rede separando portadoras de estegos de referência (`hill` ou `unif`) na carga `bpp`."""
     dev = cfg["dispositivo"]
     rng = torch.Generator().manual_seed(semente)
     fazer = estego_hill if tipo == "hill" else estego_unif
@@ -544,8 +513,6 @@ def auc_ref(rede, loader, cfg, bpp, tipo="hill", semente=4321):
 
 
 def pretreinar_critico_curriculo(cfg, pasta, estagios, lr=1e-4, log=print):
-    """SRNet + BatchNorm + BCE contra o HILL, carga a carga (`estagios` = [(bpp, épocas), ...]), levando os
-    pesos de um estágio para o seguinte."""
     cfg = dict(CONFIG, **cfg)
     dev = cfg["dispositivo"]
     os.makedirs(pasta, exist_ok=True)
@@ -590,8 +557,6 @@ def pretreinar_critico_curriculo(cfg, pasta, estagios, lr=1e-4, log=print):
 
 
 def testar_estabilidade(cfg, critico, congelar=(), epocas=6, log=print):
-    """O crítico (já em afim) treinado com o objetivo WGAN-GP contra estegos HILL FIXAS na carga `bpp`, sem
-    gerador."""
     cfg = dict(CONFIG, **cfg)
     dev, bpp = cfg["dispositivo"], cfg["bpp"]
     torch.manual_seed(cfg["semente"])
@@ -629,13 +594,11 @@ def testar_estabilidade(cfg, critico, congelar=(), epocas=6, log=print):
 
 @torch.no_grad()
 def mapa_p(gerador, x255):
-    """uint8/float 0–255 (B,1,H,W) -> p já molhado, em float32."""
     return molhar(gerador(x255.float() / 255.0), x255.float())
 
 
 @torch.no_grad()
 def embutir(gerador, x255, bpp, gerador_rng):
-    """Estego uint8 com o simulador ÓTIMO da Fase 4 — o mesmo que avalia o HILL."""
     x255 = x255.to(next(gerador.parameters()).device)
     rho = custo(mapa_p(gerador, x255))
     rho = torch.where((x255 <= 0) | (x255 >= 255), torch.full_like(rho, CUSTO_MOLHADO), rho)
@@ -654,8 +617,6 @@ def carregar_gerador(caminho, dispositivo):
 
 @torch.no_grad()
 def avaliar_laco_alvo(gerador, disc, loader, cfg):
-    """Fase 2.6: o crítico do laço (treinado a `bpp`) julgando estegos na carga-alvo, com o simulador
-    ótimo: as do braço, as do HILL e as do ±1 uniforme (controle positivo)."""
     dev, b = cfg["dispositivo"], cfg["bpp_laco_alvo"]
     rng = torch.Generator().manual_seed(4321)
     sc = {"braco": [], "hill": [], "unif": []}
@@ -680,8 +641,6 @@ def avaliar_laco_alvo(gerador, disc, loader, cfg):
 
 @torch.no_grad()
 def validar(gerador, disc, loader, cfg, hill_ref, critico_w=None):
-    """Triagem por época, no split de validação (= teste da Fase 4): carga do mapa, taxa de alteração e
-    PSNR com o simulador ótimo, e a AUC do discriminador do laço."""
     dev = cfg["dispositivo"]
     gerador.eval(); disc.eval()
     if critico_w is not None:
@@ -722,7 +681,6 @@ def validar(gerador, disc, loader, cfg, hill_ref, critico_w=None):
 
 @torch.no_grad()
 def referencia_hill(loader, cfg):
-    """Taxa de alteração e PSNR do HILL nas mesmas imagens e na mesma carga — o alvo de forma."""
     rng = torch.Generator().manual_seed(1234)
     taxa, mse, n = 0.0, 0.0, 0
     for x in loader:
@@ -738,7 +696,6 @@ def referencia_hill(loader, cfg):
 
 @torch.no_grad()
 def salvar_amostras(gerador, loader, cfg, epoca):
-    """Portadora | mapa p (normalizado) | mapa de custo do HILL (inverso, normalizado)."""
     x = next(iter(loader))[:4].to(cfg["dispositivo"])
     x255 = torch.round(x * 255.0)
     p = mapa_p(gerador, x255)
@@ -809,7 +766,6 @@ COLUNAS = ["epoca", "perda_d", "perda_adv", "perda_cap", "bpp_treino", "bpp_mapa
 
 
 def _colunas_do_csv(caminho):
-    """Um run retomado de antes de 25/10 tem o CSV sem a coluna `vencendo`: mantém o cabeçalho dele."""
     if not os.path.exists(caminho):
         return COLUNAS
     with open(caminho, encoding="utf-8") as f:
@@ -817,7 +773,6 @@ def _colunas_do_csv(caminho):
 
 
 def venceu_epoca(val, cfg):
-    """Critério das etapas: adversário do laço com AUC ≤ auc_alvo e carga a ±10% do alvo."""
     return (val["auc_laco"] <= cfg["auc_alvo"]
             and abs(val["bpp_mapa"] - cfg["bpp"]) <= 0.1 * cfg["bpp"])
 
@@ -835,7 +790,6 @@ def _achar_ckpt(cfg):
 
 
 def montar_loaders(cfg):
-    """Treino e validação do gerador com o split da Fase 4: a val daqui é o TESTE dela."""
     cfg4 = dict(CONFIG_SPLIT, pasta_dados=cfg["pasta_dados"], semente_split=cfg["semente"],
                 fracao_val=cfg["fracao_val"], max_imagens=cfg["max_imagens"])
     caminhos, idx_tr, idx_va, idx_te = dividir(cfg4)
@@ -852,7 +806,6 @@ def montar_loaders(cfg):
 
 
 def treinar(cfg=None):
-    """Treina um braço."""
     cfg = dict(CONFIG, **(cfg or {}))
     with p_hill_em(torch.float64 if cfg.get("p_hill_float64") else P_HILL_DTYPE):
         return _treinar(cfg)
@@ -913,7 +866,7 @@ def _treinar(cfg):
         log(f"[retomada] {caminho}: continuando da época {inicio_ep}")
     else:
         log("=" * 78)
-        log(f"FASE 3.0 — custo aprendido  |  {cfg['adversario']} × {cfg['discriminador']}  |  "
+        log(f"FASE 3.0 - custo aprendido  |  {cfg['adversario']} × {cfg['discriminador']}  |  "
             f"{cfg['bpp']} bpp  |  " + ("p inicial = HILL" if cfg["base"] == "hill" else f"p inicial {p0:.4f}"))
         log("config: " + ", ".join(f"{k}={v}" for k, v in sorted(cfg.items())))
         log("=" * 78)

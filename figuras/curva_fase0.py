@@ -44,7 +44,6 @@ def suavizar(valores, janela=JANELA_SUAVIZACAO):
 
 
 def indice_melhor(acuracia, psnr):
-    """Mesma regra do treino: entre as épocas que batem a acurácia, a de maior PSNR."""
     return max(range(len(psnr)),
                key=lambda i: (acuracia[i] >= ACURACIA_ALVO, psnr[i]))
 
@@ -74,7 +73,7 @@ def desenhar_psnr(eixo, epocas, psnr, melhor):
                   arrowprops=dict(arrowstyle="-", color=DISCRETO, linewidth=0.8))
     eixo.set_ylabel("PSNR (dB)", color=TINTA2, fontsize=9)
     eixo.set_ylim(15, 37)
-    eixo.set_title("Fase 0/1 · BOSSBase · 0,0625 bpp — evolução por época",
+    eixo.set_title("Fase 0/1 · BOSSBase · 0,0625 bpp - evolução por época",
                    color=TINTA, fontsize=10.5, fontweight="bold", loc="left", pad=8)
 
 

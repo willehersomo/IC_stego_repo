@@ -85,13 +85,13 @@ def main():
     painel_psnr.legend(loc="upper left", bbox_to_anchor=(0.01, 0.82), fontsize=8,
                        frameon=False, labelcolor=TINTA)
     painel_psnr.set_title(
-        "BOSSBase · 0,0625 bpp — Fase 0 → Fase 2 (linha do tempo contínua)",
+        "BOSSBase · 0,0625 bpp - Fase 0 → Fase 2 (linha do tempo contínua)",
         color=TINTA, fontsize=10.5, fontweight="bold", loc="left", pad=8)
 
     painel_ssim.plot(epocas0, suavizar(ssim0), color=FASE0, linewidth=2.0)
     painel_ssim.plot(x2, suavizar(ssim2), color=FASE2, linewidth=2.0)
     painel_ssim.set_ylabel("SSIM", color=TINTA2, fontsize=9)
-    painel_ssim.set_xlabel(f"época (Fase 0: 1–{corte}, Fase 2: {corte + 1}–{fim})",
+    painel_ssim.set_xlabel(f"época (Fase 0: 1-{corte}, Fase 2: {corte + 1}-{fim})",
                            color=TINTA2, fontsize=9)
     painel_ssim.set_ylim(0.25, 1.0)
 
