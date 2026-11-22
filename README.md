@@ -17,8 +17,13 @@ resultado pode ser atribuído ao componente que o produziu.
 | 2.5 | gerador residual (STEGS2GAN) | fechada: melhor configuração da ocultação profunda |
 | 3 | esteganalisador (SRNet) no laço | reprovada: a SRNet detecta a estego com AUC ~1,0; mantida para comparação |
 | 3.0 | custo de distorção aprendido, partindo do HILL, com esteganalisador + crítico WGAN-GP no laço | fechada |
-| 3.1 | tamanhos de imagem (128/256/512) e regimes de carga (bpp fixo × root rate) | em andamento |
-| 4.0 | régua externa: P_E com esteganalisadores treinados do zero (SRNet, EfficientNet-B0) | em andamento |
+| 3.1 | tamanhos de imagem (128/256) e regimes de carga (bpp fixo × root rate) | fechada |
+| 4.0 | régua externa: P_E com esteganalisadores treinados do zero (SRNet, EfficientNet-B0) | fechada |
+| 4.5 | inserção e extração reais com STC (pySTC, com a repartição da mensagem por entropia restaurada) | fechada |
+| 4.6 | métodos de referência na mesma régua: S-UNIWARD, LSB, ±1, ocultação profunda e custo aprendido do zero | fechada |
+
+Os resultados das Fases 3.0 a 4.6 estão em um artigo em preparação e serão publicados aqui
+depois dele.
 
 A partir da Fase 3.0 a rede deixa de esconder a mensagem: o gerador desenha o mapa de onde
 alterar cada pixel (custo de distorção) e a mensagem é embutida por um código (STC).
@@ -30,7 +35,7 @@ BOSSBase 1.01, tons de cinza, 128 × 128, carga de 1.024 bits por imagem (0,0625
 | Fase | O que entra | Acurácia | PSNR | SSIM | L∞ | Épocas ≥ 35 dB |
 |---|---|---|---|---|---|---|
 | 0/1 | codificador + decodificador, sem adversário | 0,9999 | 35,16 dB | 0,963 | 0,362 | 1 de 120 |
-| 2 | crítico WGAN-GP | 0,9997 | 36,30 dB | 0,974 | 0,388 | 56 de 60 |
+| 2 | crítico WGAN-GP | 0,9997 | 36,30 dB | 0,974 | 0,360 | 56 de 60 |
 | 2.5 | gerador residual (STEGS2GAN) | 0,9998 | **38,27 dB** | **0,980** | **0,203** | **60 de 60** |
 
 A Fase 2.5 é a melhor configuração medida. O ganho não é um pico: as 60 épocas do gerador
@@ -46,8 +51,11 @@ modelo/          o código do modelo - fonte única da verdade
   fase3_esteganalisador.py             Fase 3: esteganalisador no laço adversarial
   fase30_custo_wgan.py                 Fase 3.0: custo aprendido (HILL, simulador de STC, laço)
   fase40_pe.py                         Fase 4.0: P_E com esteganalisadores independentes
+  fase45_stc.py                        Fase 4.5: embutir e extrair com STC real
+  fase46_baselines.py                  Fase 4.6: S-UNIWARD, LSB e demais métodos de referência
 
-notebooks/       execução no Colab GPU (autossuficientes: escrevem os .py no ambiente)
+notebooks/       execução no Colab GPU (autossuficientes: escrevem os .py no ambiente),
+                 um caderno por fase, mais a figura de mapas de custo
 figuras/         scripts que geram as curvas + os diagramas de arquitetura (PNG)
 datasets/        symlink para os conjuntos de dados (não versionado)
 runs/            registro dos treinos: logs e CSVs de métricas
