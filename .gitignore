@@ -1,29 +1,21 @@
-# --- Datasets: 6,6 GB. 'datasets' é um symlink para fora do repositório ---
-# Sem a barra final: com ela o padrão só casa com diretório, e o git trata
-# symlink como blob - o link entraria no commit com o caminho absoluto dentro.
 datasets
 
-# --- Pesos: ficam no disco e no Drive, não no histórico do git ---
 *.pt
 *.pth
 
-# --- Amostras de treino: centenas de PNGs por run, regeneráveis ---
 runs/**/samples_epoch*.png
 
-
-# --- Python ---
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 .venv/
 venv/
 
-# --- Editores ---
 .~lock.*#
 .vscode/
 .idea/
 
-# --- Só no disco, fora do repositório público 
-  ---
 ROADMAP.md
 ferramentas/
+
+artigo/

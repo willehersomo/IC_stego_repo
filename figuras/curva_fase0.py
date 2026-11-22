@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import csv
 import pathlib
@@ -85,7 +84,6 @@ def desenhar_ssim_e_acuracia(eixo, epocas, acuracia, ssim):
     eixo.set_xlabel("época", color=TINTA2, fontsize=9)
     eixo.set_ylim(0.2, 1.03)
     eixo.legend(loc="lower right", fontsize=8, frameon=False, labelcolor=TINTA)
-    # rótulos diretos dos valores finais
     eixo.text(epocas[-1] + 1.5, ssim[-1], f"{ssim[-1]:.3f}".replace(".", ","),
               color=VERDE, fontsize=7.5, va="center")
     eixo.text(epocas[-1] + 1.5, acuracia[-1], f"{acuracia[-1]:.3f}".replace(".", ","),

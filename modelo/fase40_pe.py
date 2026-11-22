@@ -43,7 +43,6 @@ CONFIG = {
 }
 
 
-
 pe_auc = f30.pe_auc
 
 
@@ -69,7 +68,6 @@ def metricas_imagem(capas, estego, lote=100):
             "ssim": float(ss), "mse": float(mse),
             "taxa": float((d != 0).float().mean()),
             "rms": float(math.sqrt(mse))}
-
 
 
 def dividir(cfg):
@@ -119,7 +117,7 @@ def gerar_estego(metodo, capas, idx_te, bpp, cfg, log=print):
     rng = torch.Generator().manual_seed(cfg["semente_embutir"])
     lote = f30._lote_por_tamanho(64, capas)
     ger = f30.carregar_gerador(metodo["ckpt"], dev) if metodo["tipo"] == "custo" else None
-    partes = []
+    partes, estat = [], {}
     for i in range(0, len(capas), lote):
         x = capas[i:i + lote].to(dev).double()
         if metodo["tipo"] == "hill":
@@ -130,17 +128,20 @@ def gerar_estego(metodo, capas, idx_te, bpp, cfg, log=print):
             with f30.p_hill_em(torch.float64):
                 y = f30.embutir(ger, x.float(), bpp, rng)
         else:
-            raise ValueError(f"tipo de método desconhecido: {metodo['tipo']}")
+            import fase46_baselines as f46
+            y = f46.estego(metodo, x, bpp, rng, estat)
         partes.append(y.float().round().clamp(0, 255).to(torch.uint8).cpu())
     estego = torch.cat(partes)
     info = metricas_imagem(capas[idx_te], estego[idx_te])
+    if estat.get("bits"):
+        info["acuracia_bits"] = estat["acertos"] / estat["bits"]
+        log(f"[corpus] {metodo['nome']}: acurácia de bits do decodificador após arredondar {info['acuracia_bits']:.4f}")
     os.makedirs(os.path.dirname(cache), exist_ok=True)
     torch.save((estego, info), cache)
     log(f"[corpus] {metodo['nome']} @ {bpp:g} bpp: {len(estego)} estegos em {time.time() - t0:.0f}s | "
         f"teste: PSNR {info['psnr']:.2f}  SSIM {info['ssim']:.5f}  MSE {info['mse']:.4f}  "
         f"taxa {info['taxa']:.2%}")
     return estego, info
-
 
 
 class _EffNet(nn.Module):
@@ -250,7 +251,6 @@ def treinar_detector(nome, capas, estego, idx_tr, idx_va, idx_te, cfg, semente, 
             "minutos": (time.time() - t0) / 60}
 
 
-
 def _espelhar_arquivo(local, cfg):
     if not cfg.get("espelho"):
         return
@@ -288,7 +288,6 @@ def preparar_curriculo(nome, capas, idx_tr, idx_va, cfg, semente, log=print):
     torch.save(estado, local)
     _espelhar_arquivo(local, cfg)
     return estado
-
 
 
 COLUNAS = ["conjunto", "tamanho", "metodo", "bpp", "detector", "semente", "pe", "auc", "pe_val",
@@ -405,7 +404,6 @@ def rodar(metodos, cargas=(0.4, 0.2), detectores=("srnet_cur", "effnet"), sement
     log("[fim   ] todas as combinações medidas")
     _espelhar_arquivo(caminho_log, cfg)
     return linhas
-
 
 
 def _bootstrap_delta(notas_a, notas_h, n_teste, reamostras, rng, grupos=None):

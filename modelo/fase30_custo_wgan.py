@@ -23,7 +23,6 @@ import fase25_residual as f25
 import fase3_esteganalisador as f3
 
 
-
 CONFIG_SPLIT = {
     "separador_cena": "__",
     "semente_split": 42,
@@ -85,8 +84,6 @@ def _dividir_por_cena(caminhos, sep, cfg):
     return ordem, idx[n_teste + n_val:], idx[n_teste:n_teste + n_val], idx[:n_teste]
 
 
-
-
 CUSTO_MOLHADO = 1e10   
 
 
@@ -144,10 +141,8 @@ def simular_embutimento(x, rp, rm, bits, gerador_rng, iteracoes=60):
     return delta
 
 
-
 def _lote_por_tamanho(lote, capas):
     return max(1, int(lote * 128 * 128 / capas[0].numel()))
-
 
 
 PASSOS = {
@@ -209,8 +204,6 @@ def preparar(passo, pasta_fontes, pasta_destino, log=print):
     destino = os.path.join(pasta_destino, nome_pasta(passo))
     recortar(origem, destino, p["canais"], p["tamanho"], p["por_imagem"], log=log)
     return destino, p
-
-
 
 
 P_MIN = 1e-6
@@ -298,8 +291,6 @@ class GeradorCusto(nn.Module):
             q = (2 * p_hill(torch.round(x * 255.0), self.bpp)).clamp(2 * P_MIN, 1 - 2 * P_MIN)
             z = z + torch.log(q / (1 - q))
         return (0.5 * torch.sigmoid(z)).clamp(P_MIN, 0.5 - P_MIN)
-
-
 
 
 NORMAS = ("batch", "instancia", "afim", "espectral")
@@ -415,8 +406,6 @@ def construir_discriminador(cfg):
     if cfg["discriminador"] == "srnet":
         return _SRNet255(canais, norma)
     return XuNet6HPF(canais, norma)
-
-
 
 
 def estego_hill(x255, bpp, rng):
@@ -591,7 +580,6 @@ def testar_estabilidade(cfg, critico, congelar=(), epocas=6, log=print):
     return hist
 
 
-
 @torch.no_grad()
 def mapa_p(gerador, x255):
     return molhar(gerador(x255.float() / 255.0), x255.float())
@@ -704,8 +692,6 @@ def salvar_amostras(gerador, loader, cfg, epoca):
     norm = lambda t: t / t.flatten(1).amax(1).clamp_min(1e-12).view(-1, 1, 1, 1)
     save_image(torch.cat([x, norm(p), norm(inv_hill)]), os.path.join(
         cfg["pasta_saida"], f"amostras_epoca{epoca:03d}.png"), nrow=4)
-
-
 
 
 CONFIG = {

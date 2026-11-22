@@ -43,7 +43,6 @@ CONFIG = {
 }
 
 
-
 COLAB_GPU = dict(
     tamanho_img=128,
     tamanho_msg=32,         

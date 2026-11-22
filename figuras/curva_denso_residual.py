@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import csv
 import pathlib
@@ -74,8 +73,6 @@ def desenhar_psnr(eixo, series, corte, fim):
     eixo.text(3, PSNR_ALVO + 0.6, f"alvo {PSNR_ALVO:.0f} dB".replace(".", ","),
               color=ALVO, fontsize=7.5, va="bottom", style="italic")
 
-    # rótulos diretos: identidade não fica só na cor. Afastados na vertical
-    # porque as duas curvas terminam a ~2 dB uma da outra.
     for (x, psnr, cor, rotulo), desloca in zip(reversed(series), (7, -7)):
         eixo.annotate(f"{rotulo} {psnr[-1]:.1f} dB".replace(".", ","),
                       xy=(fim, suavizar(psnr)[-1]), xytext=(6, desloca),
